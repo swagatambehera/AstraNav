@@ -56,8 +56,6 @@ g++ -std=c++17 -O2 cpp-engine/src/main.cpp -o cpp-engine/route_engine
 python3 -m uvicorn backend.main:app --reload
 ```
 
-Open the application using the local frontend setup provided in the project.
-
 ## API Endpoints
 
 | Method | Endpoint | Description |
