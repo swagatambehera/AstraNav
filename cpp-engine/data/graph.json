@@ -11,10 +11,10 @@
       "height": 2048
     },
     "coordinate_note": "POI and junction x/y positions are approximate placements traced from the user-confirmed pink dotted pedestrian paths on the supplied campus map. POIs are placed at walkway access points where possible.",
-    "edge_note": "Edges represent the pink dotted walkway network and short access spurs. No edge is intended to cross the cricket-ground interior or building interiors.",
+    "edge_note": "Edges model the user-confirmed pink dotted pedestrian walkways. A new east-side junction connects the eastern perimeter walkway to the horizontal walkway south of J.C. Bose and X-Lab. Positions and weights remain approximate interpretations of the map and require on-site verification.",
     "distance_unit": "illustrative kilometres",
     "weight_note": "Weights are proportional to image-coordinate segment lengths and are demonstration estimates, not surveyed walking distances.",
-    "routing_note": "For real navigation, verify access points and walkway continuity on site. This graph is intended for algorithm demonstration."
+    "routing_note": "The graph includes a candidate route from Dining Complex via the east walkway, J.C. Bose–X-Lab south walkway, X-Lab west walkway, and SR Block walkway. Dijkstra selects the lowest total edge weight; it is not forced to use this route."
   },
   "nodes": [
     {
@@ -334,7 +334,7 @@
     },
     {
       "id": 35,
-      "name": "JC Bose East Walkway Junction",
+      "name": "J.C. Bose–X-Lab South Walkway Junction",
       "category": "Path Junction",
       "lat": 16.4632,
       "lon": 80.5064,
@@ -343,7 +343,7 @@
     },
     {
       "id": 36,
-      "name": "JC Bose South Walkway Junction",
+      "name": "Reserved duplicate junction (unused)",
       "category": "Path Junction",
       "lat": 16.4632,
       "lon": 80.5064,
@@ -357,6 +357,15 @@
       "lat": 16.4632,
       "lon": 80.5064,
       "x": 489.9,
+      "y": 887.2
+    },
+    {
+      "id": 38,
+      "name": "East X-Lab South Walkway Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 910.8,
       "y": 887.2
     }
   ],
@@ -569,6 +578,18 @@
       "from": 24,
       "to": 6,
       "weight": 0.095,
+      "bidirectional": true
+    },
+    {
+      "from": 27,
+      "to": 38,
+      "weight": 0.063,
+      "bidirectional": true
+    },
+    {
+      "from": 38,
+      "to": 35,
+      "weight": 0.089,
       "bidirectional": true
     }
   ]
