@@ -1,18 +1,20 @@
 {
   "metadata": {
-    "title": "SRM University-AP Campus Route Demonstration Graph",
-    "campus_center": {
-      "lat": 16.4632,
-      "lon": 80.5064
-    },
-    "coordinate_note": "x/y are pixel positions on the supplied campus map represented on a 1055 x 1414 Leaflet image-coordinate canvas. Node 4 marks X-Lab; node 6 marks Vikram Sarabhai Block. Building positions are approximate.",
-    "distance_unit": "kilometres",
-    "edge_note": "Edges and weights are illustrative pedestrian connections. Verify walkway connectivity and distances before using for real navigation.",
+    "title": "AstraNav SRM AP Pink-Walkway Campus Graph",
     "map_mode": "campus-image pixel coordinates",
     "map_image_size": {
       "width": 1055,
       "height": 1414
-    }
+    },
+    "source_image_size": {
+      "width": 1529,
+      "height": 2048
+    },
+    "coordinate_note": "POI and junction x/y positions are approximate placements traced from the user-confirmed pink dotted pedestrian paths on the supplied campus map. POIs are placed at walkway access points where possible.",
+    "edge_note": "Edges represent the pink dotted walkway network and short access spurs. No edge is intended to cross the cricket-ground interior or building interiors.",
+    "distance_unit": "illustrative kilometres",
+    "weight_note": "Weights are proportional to image-coordinate segment lengths and are demonstration estimates, not surveyed walking distances.",
+    "routing_note": "For real navigation, verify access points and walkway continuity on site. This graph is intended for algorithm demonstration."
   },
   "nodes": [
     {
@@ -21,8 +23,8 @@
       "category": "Entrance",
       "lat": 16.4632,
       "lon": 80.5064,
-      "x": 914,
-      "y": 642
+      "x": 910.8,
+      "y": 621.4
     },
     {
       "id": 1,
@@ -30,8 +32,8 @@
       "category": "Academic",
       "lat": 16.46365,
       "lon": 80.5064,
-      "x": 421,
-      "y": 1165
+      "x": 293.2,
+      "y": 959.7
     },
     {
       "id": 2,
@@ -39,17 +41,17 @@
       "category": "Sports",
       "lat": 16.46365,
       "lon": 80.50735,
-      "x": 640,
-      "y": 968
+      "x": 555.4,
+      "y": 949.3
     },
     {
       "id": 3,
       "name": "J.C. Bose Block",
-      "category": "Academic / Research",
+      "category": "Academic",
       "lat": 16.4641,
       "lon": 80.5064,
-      "x": 710,
-      "y": 766
+      "x": 748.6,
+      "y": 714.6
     },
     {
       "id": 4,
@@ -57,8 +59,8 @@
       "category": "Academic / Laboratory",
       "lat": 16.4641,
       "lon": 80.50735,
-      "x": 585,
-      "y": 761
+      "x": 489.9,
+      "y": 721.5
     },
     {
       "id": 5,
@@ -66,8 +68,8 @@
       "category": "Path Junction",
       "lat": 16.46455,
       "lon": 80.50688,
-      "x": 492,
-      "y": 620
+      "x": 489.9,
+      "y": 621.4
     },
     {
       "id": 6,
@@ -75,8 +77,8 @@
       "category": "Academic",
       "lat": 16.465,
       "lon": 80.5064,
-      "x": 565,
-      "y": 440
+      "x": 489.9,
+      "y": 448.8
     },
     {
       "id": 7,
@@ -84,8 +86,8 @@
       "category": "Dining",
       "lat": 16.465,
       "lon": 80.50735,
-      "x": 805,
-      "y": 1020
+      "x": 814.2,
+      "y": 1001.1
     },
     {
       "id": 8,
@@ -93,8 +95,8 @@
       "category": "Hostel",
       "lat": 16.46275,
       "lon": 80.50605,
-      "x": 596,
-      "y": 243
+      "x": 489.9,
+      "y": 241.7
     },
     {
       "id": 9,
@@ -102,8 +104,8 @@
       "category": "Hostel",
       "lat": 16.46275,
       "lon": 80.50675,
-      "x": 390,
-      "y": 840
+      "x": 293.2,
+      "y": 835.4
     },
     {
       "id": 10,
@@ -111,8 +113,8 @@
       "category": "Hostel",
       "lat": 16.46235,
       "lon": 80.50605,
-      "x": 596,
-      "y": 158
+      "x": 489.9,
+      "y": 172.6
     },
     {
       "id": 11,
@@ -120,8 +122,8 @@
       "category": "Hostel",
       "lat": 16.46235,
       "lon": 80.50675,
-      "x": 774,
-      "y": 58
+      "x": 779.7,
+      "y": 58.7
     },
     {
       "id": 12,
@@ -129,8 +131,8 @@
       "category": "Hostel",
       "lat": 16.462,
       "lon": 80.50605,
-      "x": 811,
-      "y": 131
+      "x": 910.8,
+      "y": 131.2
     },
     {
       "id": 13,
@@ -138,17 +140,17 @@
       "category": "Hostel",
       "lat": 16.462,
       "lon": 80.50675,
-      "x": 390,
-      "y": 661
+      "x": 293.2,
+      "y": 586.9
     },
     {
       "id": 14,
-      "name": "Kaveri Hostel (verify current status)",
+      "name": "Kaveri Hostel",
       "category": "Hostel",
       "lat": 16.4617,
       "lon": 80.5064,
-      "x": 597,
-      "y": 41
+      "x": 586.5,
+      "y": 51.8
     },
     {
       "id": 15,
@@ -156,8 +158,8 @@
       "category": "Healthcare",
       "lat": 16.46315,
       "lon": 80.50735,
-      "x": 597,
-      "y": 104
+      "x": 586.5,
+      "y": 110.5
     },
     {
       "id": 16,
@@ -165,8 +167,8 @@
       "category": "Academic",
       "lat": 16.4621,
       "lon": 80.5057,
-      "x": 255,
-      "y": 1290
+      "x": 100.0,
+      "y": 1318.7
     },
     {
       "id": 17,
@@ -174,8 +176,8 @@
       "category": "Sports",
       "lat": 16.46235,
       "lon": 80.50715,
-      "x": 690,
-      "y": 1205
+      "x": 910.8,
+      "y": 1208.3
     },
     {
       "id": 18,
@@ -183,225 +185,390 @@
       "category": "Path Junction",
       "lat": 16.46215,
       "lon": 80.50595,
-      "x": 295,
-      "y": 1300
+      "x": 207.0,
+      "y": 1311.8
     },
     {
       "id": 19,
-      "name": "South Campus Walkway",
+      "name": "Southwest Campus Junction",
       "category": "Path Junction",
       "lat": 16.4622,
       "lon": 80.50635,
-      "x": 490,
-      "y": 1300
+      "x": 293.2,
+      "y": 1311.8
     },
     {
       "id": 20,
-      "name": "Cricket Ground Entrance Junction",
+      "name": "SR Block South Junction",
       "category": "Path Junction",
       "lat": 16.4624,
       "lon": 80.50635,
-      "x": 510,
-      "y": 1200
+      "x": 293.2,
+      "y": 959.7
     },
     {
       "id": 21,
-      "name": "Ganga Hostel Walkway Junction",
+      "name": "SR Block North Junction",
       "category": "Path Junction",
       "lat": 16.4631,
       "lon": 80.50635,
-      "x": 490,
-      "y": 840
+      "x": 293.2,
+      "y": 655.9
     },
     {
       "id": 22,
-      "name": "SR Block Walkway Junction",
+      "name": "West Campus Main Junction",
       "category": "Path Junction",
       "lat": 16.46255,
       "lon": 80.50635,
-      "x": 490,
-      "y": 1165
+      "x": 489.9,
+      "y": 655.9
+    },
+    {
+      "id": 23,
+      "name": "X-Lab West Walkway Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 489.9,
+      "y": 721.5
+    },
+    {
+      "id": 24,
+      "name": "North Campus Walkway Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 489.9,
+      "y": 621.4
+    },
+    {
+      "id": 25,
+      "name": "Gate 3 West Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 489.9,
+      "y": 621.4
+    },
+    {
+      "id": 26,
+      "name": "Gate 3 East Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 910.8,
+      "y": 621.4
+    },
+    {
+      "id": 27,
+      "name": "East Walkway Dining Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 910.8,
+      "y": 1001.1
+    },
+    {
+      "id": 28,
+      "name": "Dining Access Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 814.2,
+      "y": 1001.1
+    },
+    {
+      "id": 29,
+      "name": "East Walkway South Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 910.8,
+      "y": 1208.3
+    },
+    {
+      "id": 30,
+      "name": "Cricket Ground Access Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 555.4,
+      "y": 1204.8
+    },
+    {
+      "id": 31,
+      "name": "Hostel West Walkway Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 489.9,
+      "y": 241.7
+    },
+    {
+      "id": 32,
+      "name": "Hostel North Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 489.9,
+      "y": 51.8
+    },
+    {
+      "id": 33,
+      "name": "Hostel East North Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 910.8,
+      "y": 51.8
+    },
+    {
+      "id": 34,
+      "name": "Hostel East South Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 910.8,
+      "y": 241.7
+    },
+    {
+      "id": 35,
+      "name": "JC Bose East Walkway Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 748.6,
+      "y": 887.2
+    },
+    {
+      "id": 36,
+      "name": "JC Bose South Walkway Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 748.6,
+      "y": 887.2
+    },
+    {
+      "id": 37,
+      "name": "X-Lab South Walkway Junction",
+      "category": "Path Junction",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 489.9,
+      "y": 887.2
     }
   ],
   "edges": [
     {
-      "from": 0,
-      "to": 1,
-      "weight": 0.059,
-      "bidirectional": true
-    },
-    {
-      "from": 0,
-      "to": 2,
-      "weight": 0.133,
-      "bidirectional": true
-    },
-    {
-      "from": 1,
-      "to": 2,
-      "weight": 0.12,
-      "bidirectional": true
-    },
-    {
-      "from": 1,
-      "to": 3,
-      "weight": 0.059,
-      "bidirectional": true
-    },
-    {
-      "from": 2,
-      "to": 4,
-      "weight": 0.059,
-      "bidirectional": true
-    },
-    {
-      "from": 3,
-      "to": 4,
-      "weight": 0.12,
-      "bidirectional": true
-    },
-    {
-      "from": 3,
-      "to": 5,
-      "weight": 0.084,
-      "bidirectional": true
-    },
-    {
-      "from": 4,
-      "to": 5,
-      "weight": 0.084,
-      "bidirectional": true
-    },
-    {
-      "from": 5,
-      "to": 6,
-      "weight": 0.084,
-      "bidirectional": true
-    },
-    {
-      "from": 5,
-      "to": 7,
-      "weight": 0.084,
-      "bidirectional": true
-    },
-    {
-      "from": 0,
-      "to": 8,
-      "weight": 0.074,
-      "bidirectional": true
-    },
-    {
-      "from": 8,
-      "to": 9,
-      "weight": 0.088,
-      "bidirectional": true
-    },
-    {
-      "from": 8,
-      "to": 10,
-      "weight": 0.052,
-      "bidirectional": true
-    },
-    {
-      "from": 10,
-      "to": 11,
-      "weight": 0.088,
-      "bidirectional": true
-    },
-    {
-      "from": 10,
-      "to": 12,
-      "weight": 0.046,
-      "bidirectional": true
-    },
-    {
-      "from": 11,
-      "to": 13,
-      "weight": 0.046,
-      "bidirectional": true
-    },
-    {
-      "from": 12,
-      "to": 13,
-      "weight": 0.088,
-      "bidirectional": true
-    },
-    {
-      "from": 12,
-      "to": 14,
-      "weight": 0.059,
-      "bidirectional": true
-    },
-    {
-      "from": 13,
-      "to": 14,
-      "weight": 0.059,
-      "bidirectional": true
-    },
-    {
-      "from": 10,
-      "to": 15,
-      "weight": 0.03,
-      "bidirectional": true
-    },
-    {
-      "from": 15,
-      "to": 14,
-      "weight": 0.03,
-      "bidirectional": true
-    },
-    {
-      "from": 9,
-      "to": 21,
-      "weight": 0.035,
-      "bidirectional": true
-    },
-    {
-      "from": 13,
-      "to": 21,
-      "weight": 0.045,
-      "bidirectional": true
-    },
-    {
       "from": 16,
       "to": 18,
-      "weight": 0.035,
+      "weight": 0.059,
       "bidirectional": true
     },
     {
       "from": 18,
       "to": 19,
-      "weight": 0.075,
-      "bidirectional": true
-    },
-    {
-      "from": 19,
-      "to": 22,
-      "weight": 0.135,
-      "bidirectional": true
-    },
-    {
-      "from": 22,
-      "to": 1,
-      "weight": 0.025,
+      "weight": 0.047,
       "bidirectional": true
     },
     {
       "from": 19,
       "to": 20,
-      "weight": 0.105,
+      "weight": 0.194,
       "bidirectional": true
     },
     {
       "from": 20,
+      "to": 21,
+      "weight": 0.167,
+      "bidirectional": true
+    },
+    {
+      "from": 21,
+      "to": 22,
+      "weight": 0.108,
+      "bidirectional": true
+    },
+    {
+      "from": 22,
+      "to": 24,
+      "weight": 0.019,
+      "bidirectional": true
+    },
+    {
+      "from": 24,
+      "to": 25,
+      "weight": 0.005,
+      "bidirectional": true
+    },
+    {
+      "from": 25,
+      "to": 26,
+      "weight": 0.231,
+      "bidirectional": true
+    },
+    {
+      "from": 26,
+      "to": 27,
+      "weight": 0.209,
+      "bidirectional": true
+    },
+    {
+      "from": 27,
+      "to": 28,
+      "weight": 0.053,
+      "bidirectional": true
+    },
+    {
+      "from": 28,
+      "to": 7,
+      "weight": 0.005,
+      "bidirectional": true
+    },
+    {
+      "from": 22,
+      "to": 23,
+      "weight": 0.036,
+      "bidirectional": true
+    },
+    {
+      "from": 23,
+      "to": 4,
+      "weight": 0.005,
+      "bidirectional": true
+    },
+    {
+      "from": 23,
+      "to": 37,
+      "weight": 0.091,
+      "bidirectional": true
+    },
+    {
+      "from": 37,
+      "to": 35,
+      "weight": 0.142,
+      "bidirectional": true
+    },
+    {
+      "from": 35,
+      "to": 3,
+      "weight": 0.095,
+      "bidirectional": true
+    },
+    {
+      "from": 27,
+      "to": 29,
+      "weight": 0.114,
+      "bidirectional": true
+    },
+    {
+      "from": 29,
       "to": 17,
-      "weight": 0.035,
+      "weight": 0.005,
+      "bidirectional": true
+    },
+    {
+      "from": 29,
+      "to": 30,
+      "weight": 0.195,
+      "bidirectional": true
+    },
+    {
+      "from": 30,
+      "to": 2,
+      "weight": 0.141,
       "bidirectional": true
     },
     {
       "from": 20,
-      "to": 2,
-      "weight": 0.08,
+      "to": 1,
+      "weight": 0.005,
+      "bidirectional": true
+    },
+    {
+      "from": 21,
+      "to": 9,
+      "weight": 0.099,
+      "bidirectional": true
+    },
+    {
+      "from": 21,
+      "to": 13,
+      "weight": 0.038,
+      "bidirectional": true
+    },
+    {
+      "from": 24,
+      "to": 31,
+      "weight": 0.209,
+      "bidirectional": true
+    },
+    {
+      "from": 31,
+      "to": 32,
+      "weight": 0.104,
+      "bidirectional": true
+    },
+    {
+      "from": 32,
+      "to": 14,
+      "weight": 0.053,
+      "bidirectional": true
+    },
+    {
+      "from": 32,
+      "to": 10,
+      "weight": 0.066,
+      "bidirectional": true
+    },
+    {
+      "from": 31,
+      "to": 8,
+      "weight": 0.005,
+      "bidirectional": true
+    },
+    {
+      "from": 32,
+      "to": 33,
+      "weight": 0.231,
+      "bidirectional": true
+    },
+    {
+      "from": 33,
+      "to": 11,
+      "weight": 0.072,
+      "bidirectional": true
+    },
+    {
+      "from": 33,
+      "to": 12,
+      "weight": 0.044,
+      "bidirectional": true
+    },
+    {
+      "from": 33,
+      "to": 34,
+      "weight": 0.104,
+      "bidirectional": true
+    },
+    {
+      "from": 34,
+      "to": 26,
+      "weight": 0.209,
+      "bidirectional": true
+    },
+    {
+      "from": 32,
+      "to": 15,
+      "weight": 0.062,
+      "bidirectional": true
+    },
+    {
+      "from": 24,
+      "to": 6,
+      "weight": 0.095,
       "bidirectional": true
     }
   ]
