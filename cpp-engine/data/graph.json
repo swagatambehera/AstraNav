@@ -1,0 +1,408 @@
+{
+  "metadata": {
+    "title": "SRM University-AP Campus Route Demonstration Graph",
+    "campus_center": {
+      "lat": 16.4632,
+      "lon": 80.5064
+    },
+    "coordinate_note": "x/y are pixel positions on the supplied campus map represented on a 1055 x 1414 Leaflet image-coordinate canvas. Node 4 marks X-Lab; node 6 marks Vikram Sarabhai Block. Building positions are approximate.",
+    "distance_unit": "kilometres",
+    "edge_note": "Edges and weights are illustrative pedestrian connections. Verify walkway connectivity and distances before using for real navigation.",
+    "map_mode": "campus-image pixel coordinates",
+    "map_image_size": {
+      "width": 1055,
+      "height": 1414
+    }
+  },
+  "nodes": [
+    {
+      "id": 0,
+      "name": "Gate 3 / Arrival & Check-In",
+      "category": "Entrance",
+      "lat": 16.4632,
+      "lon": 80.5064,
+      "x": 914,
+      "y": 642
+    },
+    {
+      "id": 1,
+      "name": "S.R. Block 1",
+      "category": "Academic",
+      "lat": 16.46365,
+      "lon": 80.5064,
+      "x": 421,
+      "y": 1165
+    },
+    {
+      "id": 2,
+      "name": "Sports Ground",
+      "category": "Sports",
+      "lat": 16.46365,
+      "lon": 80.50735,
+      "x": 640,
+      "y": 968
+    },
+    {
+      "id": 3,
+      "name": "J.C. Bose Block",
+      "category": "Academic / Research",
+      "lat": 16.4641,
+      "lon": 80.5064,
+      "x": 710,
+      "y": 766
+    },
+    {
+      "id": 4,
+      "name": "X-Lab",
+      "category": "Academic / Laboratory",
+      "lat": 16.4641,
+      "lon": 80.50735,
+      "x": 585,
+      "y": 761
+    },
+    {
+      "id": 5,
+      "name": "Central Concourse",
+      "category": "Path Junction",
+      "lat": 16.46455,
+      "lon": 80.50688,
+      "x": 492,
+      "y": 620
+    },
+    {
+      "id": 6,
+      "name": "Vikram Sarabhai Block",
+      "category": "Academic",
+      "lat": 16.465,
+      "lon": 80.5064,
+      "x": 565,
+      "y": 440
+    },
+    {
+      "id": 7,
+      "name": "Dining Complex",
+      "category": "Dining",
+      "lat": 16.465,
+      "lon": 80.50735,
+      "x": 805,
+      "y": 1020
+    },
+    {
+      "id": 8,
+      "name": "Krishna Hostel",
+      "category": "Hostel",
+      "lat": 16.46275,
+      "lon": 80.50605,
+      "x": 596,
+      "y": 243
+    },
+    {
+      "id": 9,
+      "name": "Ganga Hostel",
+      "category": "Hostel",
+      "lat": 16.46275,
+      "lon": 80.50675,
+      "x": 390,
+      "y": 840
+    },
+    {
+      "id": 10,
+      "name": "Godavari Hostel",
+      "category": "Hostel",
+      "lat": 16.46235,
+      "lon": 80.50605,
+      "x": 596,
+      "y": 158
+    },
+    {
+      "id": 11,
+      "name": "Yamuna Hostel",
+      "category": "Hostel",
+      "lat": 16.46235,
+      "lon": 80.50675,
+      "x": 774,
+      "y": 58
+    },
+    {
+      "id": 12,
+      "name": "Narmada Hostel",
+      "category": "Hostel",
+      "lat": 16.462,
+      "lon": 80.50605,
+      "x": 811,
+      "y": 131
+    },
+    {
+      "id": 13,
+      "name": "Vedavathi Hostel",
+      "category": "Hostel",
+      "lat": 16.462,
+      "lon": 80.50675,
+      "x": 390,
+      "y": 661
+    },
+    {
+      "id": 14,
+      "name": "Kaveri Hostel (verify current status)",
+      "category": "Hostel",
+      "lat": 16.4617,
+      "lon": 80.5064,
+      "x": 597,
+      "y": 41
+    },
+    {
+      "id": 15,
+      "name": "Health Centre",
+      "category": "Healthcare",
+      "lat": 16.46315,
+      "lon": 80.50735,
+      "x": 597,
+      "y": 104
+    },
+    {
+      "id": 16,
+      "name": "CV Raman Block",
+      "category": "Academic",
+      "lat": 16.4621,
+      "lon": 80.5057,
+      "x": 255,
+      "y": 1290
+    },
+    {
+      "id": 17,
+      "name": "Cricket Ground",
+      "category": "Sports",
+      "lat": 16.46235,
+      "lon": 80.50715,
+      "x": 690,
+      "y": 1205
+    },
+    {
+      "id": 18,
+      "name": "CV Raman Walkway Junction",
+      "category": "Path Junction",
+      "lat": 16.46215,
+      "lon": 80.50595,
+      "x": 295,
+      "y": 1300
+    },
+    {
+      "id": 19,
+      "name": "South Campus Walkway",
+      "category": "Path Junction",
+      "lat": 16.4622,
+      "lon": 80.50635,
+      "x": 490,
+      "y": 1300
+    },
+    {
+      "id": 20,
+      "name": "Cricket Ground Entrance Junction",
+      "category": "Path Junction",
+      "lat": 16.4624,
+      "lon": 80.50635,
+      "x": 510,
+      "y": 1200
+    },
+    {
+      "id": 21,
+      "name": "Ganga Hostel Walkway Junction",
+      "category": "Path Junction",
+      "lat": 16.4631,
+      "lon": 80.50635,
+      "x": 490,
+      "y": 840
+    },
+    {
+      "id": 22,
+      "name": "SR Block Walkway Junction",
+      "category": "Path Junction",
+      "lat": 16.46255,
+      "lon": 80.50635,
+      "x": 490,
+      "y": 1165
+    }
+  ],
+  "edges": [
+    {
+      "from": 0,
+      "to": 1,
+      "weight": 0.059,
+      "bidirectional": true
+    },
+    {
+      "from": 0,
+      "to": 2,
+      "weight": 0.133,
+      "bidirectional": true
+    },
+    {
+      "from": 1,
+      "to": 2,
+      "weight": 0.12,
+      "bidirectional": true
+    },
+    {
+      "from": 1,
+      "to": 3,
+      "weight": 0.059,
+      "bidirectional": true
+    },
+    {
+      "from": 2,
+      "to": 4,
+      "weight": 0.059,
+      "bidirectional": true
+    },
+    {
+      "from": 3,
+      "to": 4,
+      "weight": 0.12,
+      "bidirectional": true
+    },
+    {
+      "from": 3,
+      "to": 5,
+      "weight": 0.084,
+      "bidirectional": true
+    },
+    {
+      "from": 4,
+      "to": 5,
+      "weight": 0.084,
+      "bidirectional": true
+    },
+    {
+      "from": 5,
+      "to": 6,
+      "weight": 0.084,
+      "bidirectional": true
+    },
+    {
+      "from": 5,
+      "to": 7,
+      "weight": 0.084,
+      "bidirectional": true
+    },
+    {
+      "from": 0,
+      "to": 8,
+      "weight": 0.074,
+      "bidirectional": true
+    },
+    {
+      "from": 8,
+      "to": 9,
+      "weight": 0.088,
+      "bidirectional": true
+    },
+    {
+      "from": 8,
+      "to": 10,
+      "weight": 0.052,
+      "bidirectional": true
+    },
+    {
+      "from": 10,
+      "to": 11,
+      "weight": 0.088,
+      "bidirectional": true
+    },
+    {
+      "from": 10,
+      "to": 12,
+      "weight": 0.046,
+      "bidirectional": true
+    },
+    {
+      "from": 11,
+      "to": 13,
+      "weight": 0.046,
+      "bidirectional": true
+    },
+    {
+      "from": 12,
+      "to": 13,
+      "weight": 0.088,
+      "bidirectional": true
+    },
+    {
+      "from": 12,
+      "to": 14,
+      "weight": 0.059,
+      "bidirectional": true
+    },
+    {
+      "from": 13,
+      "to": 14,
+      "weight": 0.059,
+      "bidirectional": true
+    },
+    {
+      "from": 10,
+      "to": 15,
+      "weight": 0.03,
+      "bidirectional": true
+    },
+    {
+      "from": 15,
+      "to": 14,
+      "weight": 0.03,
+      "bidirectional": true
+    },
+    {
+      "from": 9,
+      "to": 21,
+      "weight": 0.035,
+      "bidirectional": true
+    },
+    {
+      "from": 13,
+      "to": 21,
+      "weight": 0.045,
+      "bidirectional": true
+    },
+    {
+      "from": 16,
+      "to": 18,
+      "weight": 0.035,
+      "bidirectional": true
+    },
+    {
+      "from": 18,
+      "to": 19,
+      "weight": 0.075,
+      "bidirectional": true
+    },
+    {
+      "from": 19,
+      "to": 22,
+      "weight": 0.135,
+      "bidirectional": true
+    },
+    {
+      "from": 22,
+      "to": 1,
+      "weight": 0.025,
+      "bidirectional": true
+    },
+    {
+      "from": 19,
+      "to": 20,
+      "weight": 0.105,
+      "bidirectional": true
+    },
+    {
+      "from": 20,
+      "to": 17,
+      "weight": 0.035,
+      "bidirectional": true
+    },
+    {
+      "from": 20,
+      "to": 2,
+      "weight": 0.08,
+      "bidirectional": true
+    }
+  ]
+}

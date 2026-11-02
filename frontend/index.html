@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>AstraNav — DAA Route Explorer</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        crossorigin=""
+    >
+
+    <!-- Project CSS -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    
+<div class="graph-intro" aria-hidden="true">
+    <svg viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="emeraldStroke">
+                <stop offset="0%" stop-color="#087a43"/>
+                <stop offset="50%" stop-color="#5cf5a5"/>
+                <stop offset="100%" stop-color="#087a43"/>
+            </linearGradient>
+        </defs>
+
+        <!-- Graph connections -->
+        <g pathLength="1">
+            <path class="graph-edge" d="M350 115 L220 190"/>
+            <path class="graph-edge" d="M350 115 L480 190"/>
+            <path class="graph-edge" d="M220 190 L150 290"/>
+            <path class="graph-edge" d="M220 190 L350 270"/>
+            <path class="graph-edge" d="M480 190 L550 290"/>
+            <path class="graph-edge" d="M480 190 L350 270"/>
+            <path class="graph-edge" d="M150 290 L260 350"/>
+            <path class="graph-edge" d="M350 270 L260 350"/>
+            <path class="graph-edge" d="M350 270 L440 350"/>
+            <path class="graph-edge" d="M550 290 L440 350"/>
+            <path class="graph-edge" d="M350 115 L350 270"/>
+        </g>
+
+        <!-- Graph nodes -->
+        <g>
+            <circle class="graph-node" cx="350" cy="115" r="10"/>
+            <circle class="graph-node" cx="220" cy="190" r="8"/>
+            <circle class="graph-node" cx="480" cy="190" r="8"/>
+            <circle class="graph-node" cx="150" cy="290" r="8"/>
+            <circle class="graph-node" cx="350" cy="270" r="11"/>
+            <circle class="graph-node" cx="550" cy="290" r="8"/>
+            <circle class="graph-node" cx="260" cy="350" r="8"/>
+            <circle class="graph-node" cx="440" cy="350" r="8"/>
+        </g>
+
+        <circle class="intro-core" cx="350" cy="270" r="4"/>
+
+        <!-- Intro title -->
+        <text class="intro-title" x="350" y="405">
+            ASTRANAV
+        </text>
+        <text class="intro-subtitle" x="350" y="425">
+            CAMPUS ROUTE EXPLORER
+        </text>
+    </svg>
+</div>
+
+<div class="graph-intro" aria-hidden="true">
+    <svg viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="emeraldStroke">
+                <stop offset="0%" stop-color="#087a43"/>
+                <stop offset="50%" stop-color="#5cf5a5"/>
+                <stop offset="100%" stop-color="#087a43"/>
+            </linearGradient>
+        </defs>
+
+        <!-- Graph connections -->
+        <g pathLength="1">
+            <path class="graph-edge" d="M350 115 L220 190"/>
+            <path class="graph-edge" d="M350 115 L480 190"/>
+            <path class="graph-edge" d="M220 190 L150 290"/>
+            <path class="graph-edge" d="M220 190 L350 270"/>
+            <path class="graph-edge" d="M480 190 L550 290"/>
+            <path class="graph-edge" d="M480 190 L350 270"/>
+            <path class="graph-edge" d="M150 290 L260 350"/>
+            <path class="graph-edge" d="M350 270 L260 350"/>
+            <path class="graph-edge" d="M350 270 L440 350"/>
+            <path class="graph-edge" d="M550 290 L440 350"/>
+            <path class="graph-edge" d="M350 115 L350 270"/>
+        </g>
+
+        <!-- Graph nodes -->
+        <g>
+            <circle class="graph-node" cx="350" cy="115" r="10"/>
+            <circle class="graph-node" cx="220" cy="190" r="8"/>
+            <circle class="graph-node" cx="480" cy="190" r="8"/>
+            <circle class="graph-node" cx="150" cy="290" r="8"/>
+            <circle class="graph-node" cx="350" cy="270" r="11"/>
+            <circle class="graph-node" cx="550" cy="290" r="8"/>
+            <circle class="graph-node" cx="260" cy="350" r="8"/>
+            <circle class="graph-node" cx="440" cy="350" r="8"/>
+        </g>
+
+        <circle class="intro-core" cx="350" cy="270" r="4"/>
+
+        <!-- Intro title -->
+        <text class="intro-title" x="350" y="405">
+            ASTRANAV
+        </text>
+        <text class="intro-subtitle" x="350" y="425">
+            CAMPUS ROUTE EXPLORER
+        </text>
+    </svg>
+</div>
+
+    <!-- Header -->
+    <header class="topbar">
+        <div class="brand-mark">A</div>
+
+        <div class="brand">
+            <strong>AstraNav</strong>
+            <span>DAA ROUTE EXPLORER</span>
+        </div>
+
+        <div class="top-right">
+            <span class="status-dot"></span>
+            Local algorithm engine
+        </div>
+    </header>
+
+    <main class="layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="eyebrow">ROUTE PLANNER</div>
+
+            <h1>Find the shortest path.</h1>
+
+            <p class="intro">
+                Explore graph algorithms on an interactive map.
+                Choose two demo locations and compare route calculations.
+            </p>
+
+            <!-- Source -->
+            <label for="source">Starting point</label>
+            <select id="source"></select>
+
+            <!-- Destination -->
+            <label for="target">Destination</label>
+            <select id="target"></select>
+
+            <!-- Algorithm selection -->
+            <label>Algorithm</label>
+
+            <div class="algorithm-toggle">
+                <button class="algo active" data-algo="dijkstra">
+                    Dijkstra
+                </button>
+
+                <button class="algo" data-algo="bidirectional_dijkstra">
+                    Bidirectional Dijkstra
+                </button>
+            </div>
+
+            <!-- Actions -->
+            <button id="findRoute" class="primary">
+                Find route <span>→</span>
+            </button>
+
+            <button id="reset" class="secondary">
+                Reset map
+            </button>
+
+            <!-- Error message -->
+            <div id="error" class="error" role="alert"></div>
+
+            <div class="divider"></div>
+
+            <!-- Route Summary -->
+            <div class="eyebrow">ROUTE SUMMARY</div>
+
+            <div class="metric-main">
+                <span id="distance">—</span>
+                <small>kilometres</small>
+            </div>
+
+            <div class="metric-grid">
+
+                <div class="metric">
+                    <span>Algorithm</span>
+                    <strong id="resultAlgorithm">—</strong>
+                </div>
+
+                <div class="metric">
+                    <span>Nodes explored</span>
+                    <strong id="explored">—</strong>
+                </div>
+
+                <div class="metric">
+                    <span>Engine time</span>
+                    <strong id="runtime">—</strong>
+                </div>
+
+                <div class="metric">
+                    <span>Vertices in path</span>
+                    <strong id="pathLength">—</strong>
+                </div>
+
+            </div>
+
+            <!-- Path Sequence -->
+            <div class="route-box">
+
+                <div class="eyebrow">PATH SEQUENCE</div>
+
+                <ol id="pathList">
+                    <li class="muted">
+                        Calculate a route to see the path.
+                    </li>
+                </ol>
+
+            </div>
+
+            <p class="disclaimer">
+                Educational demo only. Some markers and edges are
+                approximate; verify exact campus paths before real use.
+            </p>
+
+        </aside>
+
+        <!-- Map Section -->
+        <section class="map-panel">
+
+            <div class="map-heading">
+
+                <div>
+                    <strong>SRM AP campus map</strong>
+
+                    <span>
+                        Campus diagram background · illustrative graph overlay
+                    </span>
+                </div>
+
+                <span class="map-chip">
+                    C++ · Dijkstra · Bidirectional Dijkstra
+                </span>
+
+            </div>
+
+            <!-- Leaflet Map -->
+            <div id="map"></div>
+
+            <!-- Map Legend -->
+            <div class="map-footer">
+
+                <span>
+                    <i class="legend start"></i>
+                    Source
+                </span>
+
+                <span>
+                    <i class="legend end"></i>
+                    Destination
+                </span>
+
+                <span>
+                    <i class="legend route"></i>
+                    Calculated path
+                </span>
+
+                <span class="hint">
+                    Tip: click twice to select nearest demo nodes.
+                </span>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Leaflet JavaScript -->
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        crossorigin="">
+    </script>
+
+    <!-- Project JavaScript -->
+    <script src="./app.js"></script>
+
+</body>
+</html>

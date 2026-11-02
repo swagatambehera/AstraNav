@@ -1,7 +1,7 @@
+#include <cctype>
 #include <algorithm>
 #include <chrono>
 #include <cmath>
-#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <limits>
@@ -13,12 +13,14 @@
 using namespace std;
 
 constexpr double INF = numeric_limits<double>::infinity();
-constexpr double EARTH_RADIUS_KM = 6371.0;
+using QueueItem = pair<double, int>;
+using MinPriorityQueue =
+    priority_queue<QueueItem, vector<QueueItem>, greater<QueueItem>>;
 
-// Graph structures
 struct Node {
-    int id;
-    double lat, lon;
+    int id = -1;
+    double lat = 0.0;
+    double lon = 0.0;
 };
 
 struct Edge {
@@ -29,6 +31,7 @@ struct Edge {
 struct Graph {
     vector<Node> nodes;
     vector<vector<Edge>> adj;
+    vector<vector<Edge>> reverseAdj;
 };
 
 struct Result {
@@ -39,175 +42,71 @@ struct Result {
     double milliseconds = 0.0;
 };
 
-// Convert degrees to radians
-static inline double toRadians(double degrees) {
-    constexpr double PI = 3.14159265358979323846;
-    return degrees * PI / 180.0;
-}
-
-// Haversine distance between two geographic coordinates
-static double haversineKm(
-    double lat1, double lon1,
-    double lat2, double lon2
+static void cleanQueue(
+    MinPriorityQueue& pq,
+    const vector<double>& dist,
+    const vector<bool>& settled
 ) {
-    const double dLat = toRadians(lat2 - lat1);
-    const double dLon = toRadians(lon2 - lon1);
+    while (!pq.empty()) {
+        const QueueItem item = pq.top();
+        const double key = item.first;
+        const int vertex = item.second;
 
-    const double rLat1 = toRadians(lat1);
-    const double rLat2 = toRadians(lat2);
-
-    const double sinLat = sin(dLat / 2.0);
-    const double sinLon = sin(dLon / 2.0);
-
-    const double a =
-        sinLat * sinLat +
-        cos(rLat1) * cos(rLat2) *
-        sinLon * sinLon;
-
-    const double boundedA = max(0.0, min(1.0, a));
-
-    return 2.0 * EARTH_RADIUS_KM *
-           asin(sqrt(boundedA));
-}
-
-// Calculate a safe scale for the A* heuristic
-static double calculateHeuristicScale(const Graph& g) {
-    double scale = 1.0;
-
-    for (int u = 0; u < (int)g.nodes.size(); ++u) {
-        const Node& from = g.nodes[u];
-
-        for (const Edge& edge : g.adj[u]) {
-            const Node& to = g.nodes[edge.to];
-
-            const double geoDistance = haversineKm(
-                from.lat, from.lon,
-                to.lat, to.lon
-            );
-
-            if (geoDistance > 0.0) {
-                scale = min(
-                    scale,
-                    edge.weight / geoDistance
-                );
-            }
+        if (settled[vertex] || key > dist[vertex]) {
+            pq.pop();
+        } else {
+            break;
         }
     }
-
-    return max(0.0, scale);
 }
 
-// Dijkstra and A* shortest-path engine
-using QueueItem = pair<double, int>;
-
-static Result shortestPath(
-    const Graph& g,
-    int source,
-    int target,
-    const string& algorithm
-) {
+static Result runDijkstra(const Graph& graph, int source, int target) {
     Result result;
+    const int n = static_cast<int>(graph.nodes.size());
 
-    const int n = (int)g.nodes.size();
-
-    // Validate source and destination
-    if (source < 0 || target < 0 ||
-        source >= n || target >= n) {
-        return result;
-    }
-
-    // Precompute heuristic values
-    vector<double> h(n, 0.0);
-
-    if (algorithm == "astar") {
-        const double scale = calculateHeuristicScale(g);
-        const Node& destination = g.nodes[target];
-
-        for (int i = 0; i < n; ++i) {
-            h[i] = scale * haversineKm(
-                g.nodes[i].lat,
-                g.nodes[i].lon,
-                destination.lat,
-                destination.lon
-            );
-        }
-    }
-
-    // Initialize shortest-path data
     vector<double> dist(n, INF);
     vector<int> parent(n, -1);
-    vector<bool> closed(n, false);
+    vector<bool> settled(n, false);
+    MinPriorityQueue pq;
 
-    // Min-priority queue
-    priority_queue<
-        QueueItem,
-        vector<QueueItem>,
-        greater<QueueItem>
-    > pq;
-
-    dist[source] = 0.0;
-
-    // Start measuring search execution time
     const auto start = chrono::steady_clock::now();
 
-    pq.push({h[source], source});
+    dist[source] = 0.0;
+    pq.push({0.0, source});
 
     while (!pq.empty()) {
-        const QueueItem current = pq.top();
+        const QueueItem item = pq.top();
+        const double distance = item.first;
+        const int u = item.second;
         pq.pop();
 
-        const double priority = current.first;
-        const int u = current.second;
-
-        // Skip outdated queue entries
-        if (priority > dist[u] + h[u]) {
+        if (settled[u] || distance > dist[u]) {
             continue;
         }
 
-        // Skip already processed vertices
-        if (closed[u]) {
-            continue;
-        }
+        settled[u] = true;
+        ++result.explored;
 
-        closed[u] = true;
-        result.explored++;
-
-        // Destination reached
         if (u == target) {
             break;
         }
 
-        // Explore adjacent vertices
-        for (const Edge& edge : g.adj[u]) {
+        for (const Edge& edge : graph.adj[u]) {
             const int v = edge.to;
-
-            if (closed[v]) {
-                continue;
-            }
-
-            // Edge relaxation
             const double candidate = dist[u] + edge.weight;
 
-            if (candidate < dist[v]) {
+            if (!settled[v] && candidate < dist[v]) {
                 dist[v] = candidate;
                 parent[v] = u;
-
-                // Push updated priority
-                pq.push({
-                    candidate + h[v],
-                    v
-                });
+                pq.push({candidate, v});
             }
         }
     }
 
-    // End search timer
     const auto end = chrono::steady_clock::now();
-
     result.milliseconds =
         chrono::duration<double, milli>(end - start).count();
 
-    // Check whether destination is reachable
     if (!isfinite(dist[target])) {
         return result;
     }
@@ -215,17 +114,208 @@ static Result shortestPath(
     result.found = true;
     result.distance = dist[target];
 
-    // Reconstruct shortest path
     for (int v = target; v != -1; v = parent[v]) {
         result.path.push_back(v);
     }
-
     reverse(result.path.begin(), result.path.end());
 
     return result;
 }
 
-// Main function
+// Bidirectional Dijkstra uses the original graph in the forward direction
+// and reverseAdj in the backward direction.
+static Result runBidirectionalDijkstra(
+    const Graph& graph,
+    int source,
+    int target
+) {
+    Result result;
+    const int n = static_cast<int>(graph.nodes.size());
+
+    if (source == target) {
+        result.found = true;
+        result.distance = 0.0;
+        result.path.push_back(source);
+        result.explored = 1;
+        return result;
+    }
+
+    vector<double> distForward(n, INF);
+    vector<double> distBackward(n, INF);
+    vector<int> parentForward(n, -1);
+    vector<int> nextBackward(n, -1);
+    vector<bool> settledForward(n, false);
+    vector<bool> settledBackward(n, false);
+
+    MinPriorityQueue pqForward;
+    MinPriorityQueue pqBackward;
+
+    double bestDistance = INF;
+    int meetingVertex = -1;
+
+    const auto updateBest = [&](int vertex) {
+        if (isfinite(distForward[vertex]) &&
+            isfinite(distBackward[vertex])) {
+            const double candidate =
+                distForward[vertex] + distBackward[vertex];
+
+            if (candidate < bestDistance) {
+                bestDistance = candidate;
+                meetingVertex = vertex;
+            }
+        }
+    };
+
+    const auto start = chrono::steady_clock::now();
+
+    distForward[source] = 0.0;
+    distBackward[target] = 0.0;
+    pqForward.push({0.0, source});
+    pqBackward.push({0.0, target});
+
+    while (true) {
+        cleanQueue(pqForward, distForward, settledForward);
+        cleanQueue(pqBackward, distBackward, settledBackward);
+
+        const double minForward =
+            pqForward.empty() ? INF : pqForward.top().first;
+        const double minBackward =
+            pqBackward.empty() ? INF : pqBackward.top().first;
+
+        // No remaining pair of frontier distances can improve bestDistance.
+        if (minForward + minBackward >= bestDistance) {
+            break;
+        }
+
+        if (pqForward.empty() || pqBackward.empty()) {
+            break;
+        }
+
+        // Expand the frontier with the smaller minimum tentative distance.
+        if (minForward <= minBackward) {
+            const QueueItem item = pqForward.top();
+            const double distance = item.first;
+            const int u = item.second;
+            pqForward.pop();
+
+            if (settledForward[u] || distance > distForward[u]) {
+                continue;
+            }
+
+            settledForward[u] = true;
+            ++result.explored;
+            updateBest(u);
+
+            for (const Edge& edge : graph.adj[u]) {
+                const int v = edge.to;
+                const double candidate = distForward[u] + edge.weight;
+
+                if (!settledForward[v] && candidate < distForward[v]) {
+                    distForward[v] = candidate;
+                    parentForward[v] = u;
+                    pqForward.push({candidate, v});
+                }
+
+                updateBest(v);
+            }
+        } else {
+            const QueueItem item = pqBackward.top();
+            const double distance = item.first;
+            const int v = item.second;
+            pqBackward.pop();
+
+            if (settledBackward[v] || distance > distBackward[v]) {
+                continue;
+            }
+
+            settledBackward[v] = true;
+            ++result.explored;
+            updateBest(v);
+
+            // reverseAdj[v] contains original incoming edges u -> v.
+            for (const Edge& reverseEdge : graph.reverseAdj[v]) {
+                const int u = reverseEdge.to;
+                const double candidate =
+                    distBackward[v] + reverseEdge.weight;
+
+                if (!settledBackward[u] && candidate < distBackward[u]) {
+                    distBackward[u] = candidate;
+                    nextBackward[u] = v;
+                    pqBackward.push({candidate, u});
+                }
+
+                updateBest(u);
+            }
+        }
+    }
+
+    const auto end = chrono::steady_clock::now();
+    result.milliseconds =
+        chrono::duration<double, milli>(end - start).count();
+
+    if (meetingVertex == -1 || !isfinite(bestDistance)) {
+        return result;
+    }
+
+    // Reconstruct source -> meeting vertex.
+    vector<int> left;
+    for (int v = meetingVertex; v != -1; v = parentForward[v]) {
+        left.push_back(v);
+    }
+    reverse(left.begin(), left.end());
+
+    // Reconstruct meeting vertex -> target.
+    result.path = left;
+    int current = meetingVertex;
+
+    while (current != target) {
+        current = nextBackward[current];
+
+        if (current == -1) {
+            result.path.clear();
+            return result;
+        }
+
+        result.path.push_back(current);
+    }
+
+    result.found = true;
+    result.distance = bestDistance;
+    return result;
+}
+
+static string normalizeAlgorithm(string algorithm) {
+    transform(
+        algorithm.begin(),
+        algorithm.end(),
+        algorithm.begin(),
+        [](unsigned char c) {
+            if (c == '-') return '_';
+            if (c == ' ') return '_';
+            return static_cast<char>(tolower(c));
+        }
+    );
+
+    return algorithm;
+}
+
+static Result shortestPath(
+    const Graph& graph,
+    int source,
+    int target,
+    const string& algorithm
+) {
+    if (algorithm == "dijkstra") {
+        return runDijkstra(graph, source, target);
+    }
+
+    if (algorithm == "bidirectional_dijkstra") {
+        return runBidirectionalDijkstra(graph, source, target);
+    }
+
+    return Result{};
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -233,39 +323,36 @@ int main() {
     int n, m, source, target;
     string algorithm;
 
-    // Read request header
     if (!(cin >> n >> m >> source >> target >> algorithm)) {
         cerr << "Invalid request header\n";
         return 2;
     }
 
-    // Validate graph dimensions
-    if (n <= 0 || m < 0 ||
-        n > 1000000 || m > 5000000) {
+    algorithm = normalizeAlgorithm(algorithm);
+
+    if (n <= 0 || m < 0 || n > 1000000 || m > 5000000) {
         cerr << "Invalid graph dimensions\n";
         return 2;
     }
 
-    // Validate source and destination
-    if (source < 0 || source >= n ||
-        target < 0 || target >= n) {
+    if (source < 0 || source >= n || target < 0 || target >= n) {
         cerr << "Invalid source or target\n";
         return 2;
     }
 
-    // Validate algorithm
-    if (algorithm != "dijkstra" && algorithm != "astar") {
-        cerr << "Unknown algorithm\n";
+    if (algorithm != "dijkstra" &&
+        algorithm != "bidirectional_dijkstra") {
+        cerr << "Unknown algorithm: " << algorithm << '\n';
         return 2;
     }
 
-    Graph g;
-    g.nodes.resize(n);
-    g.adj.resize(n);
+    Graph graph;
+    graph.nodes.resize(n);
+    graph.adj.resize(n);
+    graph.reverseAdj.resize(n);
 
     vector<bool> nodeSeen(n, false);
 
-    // Read vertices
     for (int i = 0; i < n; ++i) {
         int id;
         double lat, lon;
@@ -276,16 +363,14 @@ int main() {
             lat < -90.0 || lat > 90.0 ||
             lon < -180.0 || lon > 180.0 ||
             nodeSeen[id]) {
-
             cerr << "Invalid node record\n";
             return 2;
         }
 
         nodeSeen[id] = true;
-        g.nodes[id] = {id, lat, lon};
+        graph.nodes[id] = {id, lat, lon};
     }
 
-    // Read directed edges
     for (int i = 0; i < m; ++i) {
         int from, to;
         double weight;
@@ -294,45 +379,32 @@ int main() {
             from < 0 || from >= n ||
             to < 0 || to >= n ||
             !isfinite(weight) || weight < 0.0) {
-
             cerr << "Invalid edge record\n";
             return 2;
         }
 
-        g.adj[from].push_back({to, weight});
+        graph.adj[from].push_back({to, weight});
+        graph.reverseAdj[to].push_back({from, weight});
     }
 
-    // Execute selected algorithm
-    const Result r = shortestPath(
-        g, source, target, algorithm
-    );
+    const Result result =
+        shortestPath(graph, source, target, algorithm);
 
-    // Generate JSON response
     cout << fixed << setprecision(8);
 
-    cout << "{\"found\":"
-         << (r.found ? "true" : "false")
-
-         << ",\"distance_km\":"
-         << (r.found ? r.distance : 0.0)
-
-         << ",\"explored_nodes\":"
-         << r.explored
-
-         << ",\"execution_ms\":"
-         << r.milliseconds
-
+    cout << "{\"found\":" << (result.found ? "true" : "false")
+         << ",\"distance_km\":" << (result.found ? result.distance : 0.0)
+         << ",\"explored_nodes\":" << result.explored
+         << ",\"execution_ms\":" << result.milliseconds
          << ",\"path\":[";
 
-    for (size_t i = 0; i < r.path.size(); ++i) {
+    for (size_t i = 0; i < result.path.size(); ++i) {
         if (i > 0) {
-            cout << ",";
+            cout << ',';
         }
-
-        cout << r.path[i];
+        cout << result.path[i];
     }
 
     cout << "]}\n";
-
     return 0;
 }
