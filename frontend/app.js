@@ -1,259 +1,163 @@
-const IMAGE_WIDTH = 1055;
-const IMAGE_HEIGHT = 1414;
-const API_BASE = "http://127.0.0.1:8000";
+const sourceEl = document.querySelector("#source");
+const targetEl = document.querySelector("#target");
+const algorithmEl = document.querySelector("#algorithm");
+const findButton = document.querySelector("#find");
+const resetButton = document.querySelector("#reset");
+const svg = document.querySelector("#overlay");
+const statusEl = document.querySelector("#status");
+const resultEl = document.querySelector("#result");
 
-const map = L.map("map", {
-  crs: L.CRS.Simple,
-  minZoom: -1.5,
-  maxZoom: 2,
-  zoomSnap: 0.25,
-  zoomDelta: 0.25,
-  maxBoundsViscosity: 1
-});
+let campusGraph = null;
+let isBusy = false;
 
-const imageBounds = [[0, 0], [IMAGE_HEIGHT, IMAGE_WIDTH]];
+async function loadCampusGraph() {
+  try {
+    const response = await fetch("/api/graph");
+    if (!response.ok) throw new Error(`Graph API returned HTTP ${response.status}`);
+    campusGraph = await response.json();
 
-// campus-map.png is in the same folder as index.html and app.js.
-L.imageOverlay("./campus-map.png", imageBounds).addTo(map);
-map.fitBounds(imageBounds);
-map.setMaxBounds([[-40, -40], [IMAGE_HEIGHT + 40, IMAGE_WIDTH + 40]]);
+    const destinations = campusGraph.nodes.filter(
+      node => node.category !== "Junction" && !/junction/i.test(node.name)
+    );
 
-let graph = null;
-let routeLayer = null;
-let edgeLayer = null;
-let markers = [];
-let selectedAlgorithm = "dijkstra";
-let clickCount = 0;
+    for (const node of destinations) {
+      for (const select of [sourceEl, targetEl]) {
+        const option = document.createElement("option");
+        option.value = String(node.id);
+        option.textContent = node.name;
+        select.appendChild(option);
+      }
+    }
 
-const sourceSelect = document.getElementById("source");
-const targetSelect = document.getElementById("target");
-const errorBox = document.getElementById("error");
+    // Sensible initial selection: Gate 3 -> J.C. Bose Block.
+    sourceEl.value = "0";
+    targetEl.value = "3";
+    sourceEl.disabled = false;
+    targetEl.disabled = false;
+    findButton.disabled = false;
+    statusEl.textContent = `Campus graph loaded: ${campusGraph.nodes.length} nodes and ${campusGraph.edges.length} walkway links.`;
+  } catch (error) {
+    statusEl.textContent = `Could not load campus graph: ${error.message}`;
+  }
+}
 
 function clearRoute() {
-  if (routeLayer) map.removeLayer(routeLayer);
-  routeLayer = null;
-
-  ["distance", "resultAlgorithm", "explored", "runtime", "pathLength"]
-    .forEach(id => {
-      document.getElementById(id).textContent = "—";
-    });
-
-  document.getElementById("pathList").innerHTML =
-    '<li class="muted">Calculate a route to see the path.</li>';
-  errorBox.textContent = "";
+  svg.replaceChildren();
 }
 
-function nodeById(id) {
-  return graph.nodes.find(node => node.id === Number(id));
-}
-
-function nearestNode(latlng) {
-  let best = graph.nodes[0];
-  let bestDistance = Infinity;
-
-  for (const node of graph.nodes) {
-    const dLat = latlng.lat - (IMAGE_HEIGHT - node.y);
-    const dLon = latlng.lng - node.x;
-    const distance = dLat * dLat + dLon * dLon;
-
-    if (distance < bestDistance) {
-      bestDistance = distance;
-      best = node;
-    }
-  }
-
-  return best;
-}
-
-function imageLatLng(node) {
-  return [IMAGE_HEIGHT - node.y, node.x];
-}
-
-function renderGraph() {
-  if (edgeLayer) map.removeLayer(edgeLayer);
-  markers.forEach(marker => map.removeLayer(marker));
-  markers = [];
-
-  const edgeLines = graph.edges.map(edge => {
-    const from = nodeById(edge.from);
-    const to = nodeById(edge.to);
-
-    if (!from || !to) return null;
-
-    return L.polyline([imageLatLng(from), imageLatLng(to)], {
-      color: "#9ca3af",
-      weight: 2.5,
-      opacity: 0.8,
-      dashArray: "5 6"
-    }).bindTooltip(`${Number(edge.weight).toFixed(2)} km (illustrative edge)`);
-  }).filter(Boolean);
-
-  edgeLayer = L.featureGroup(edgeLines).addTo(map);
-
-  for (const node of graph.nodes) {
-    const marker = L.circleMarker(imageLatLng(node), {
-      radius: 6,
-      color: "#14532d",
-      weight: 2,
-      fillColor: "#4ade80",
-      fillOpacity: 1
-    }).addTo(map).bindTooltip(`${node.name} · Node ${node.id}`);
-
-    markers.push(marker);
-  }
-}
-
-function populate() {
-  for (const select of [sourceSelect, targetSelect]) {
-    select.innerHTML = "";
-
-    graph.nodes.forEach(node => {
-      const option = document.createElement("option");
-      option.value = node.id;
-      option.textContent = node.name;
-      select.appendChild(option);
-    });
-  }
-
-  // Preserve the original defaults when those node IDs exist.
-  sourceSelect.value = nodeById(15) ? "15" : String(graph.nodes[0]?.id ?? "");
-  targetSelect.value = nodeById(10)
-    ? "10"
-    : String(graph.nodes[1]?.id ?? graph.nodes[0]?.id ?? "");
-}
-
-async function loadGraph() {
-  const response = await fetch(`${API_BASE}/api/graph`);
-
-  if (!response.ok) {
-    throw new Error(`Could not load graph (${response.status}). Check the backend.`);
-  }
-
-  graph = await response.json();
-
-  if (!graph || !Array.isArray(graph.nodes) || !Array.isArray(graph.edges)) {
-    throw new Error("Backend returned an invalid graph. Expected nodes and edges arrays.");
-  }
-
-  if (!graph.nodes.every(node =>
-    Number.isFinite(Number(node.x)) && Number.isFinite(Number(node.y))
-  )) {
-    throw new Error("Graph is missing image coordinates x/y. Check graph.json.");
-  }
-
-  populate();
-  renderGraph();
-  map.fitBounds(imageBounds);
-}
-
-document.querySelectorAll(".algo").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".algo").forEach(item => item.classList.remove("active"));
-    button.classList.add("active");
-    selectedAlgorithm = button.dataset.algo;
-  });
-});
-
-document.getElementById("findRoute").addEventListener("click", async () => {
+function drawRoute(pathNodes) {
   clearRoute();
+  if (!pathNodes || pathNodes.length === 0) return;
 
-  const button = document.getElementById("findRoute");
-  button.disabled = true;
-  button.textContent = "Calculating…";
+  // The SVG viewBox uses the graph's original coordinate system (1400 x 1800).
+  const points = pathNodes.map(node => `${node.x},${node.y}`).join(" ");
+  const ns = "http://www.w3.org/2000/svg";
+
+  const outline = document.createElementNS(ns, "polyline");
+  outline.setAttribute("points", points);
+  outline.setAttribute("class", "route-under");
+  svg.appendChild(outline);
+
+  const route = document.createElementNS(ns, "polyline");
+  route.setAttribute("points", points);
+  route.setAttribute("class", "route");
+  svg.appendChild(route);
+
+  const addMarker = (node, className, label) => {
+    const group = document.createElementNS(ns, "g");
+    const circle = document.createElementNS(ns, "circle");
+    circle.setAttribute("cx", node.x);
+    circle.setAttribute("cy", node.y);
+    circle.setAttribute("r", "15");
+    circle.setAttribute("class", className);
+    const title = document.createElementNS(ns, "title");
+    title.textContent = `${label}: ${node.name}`;
+    circle.appendChild(title);
+    group.appendChild(circle);
+    svg.appendChild(group);
+  };
+
+  addMarker(pathNodes[0], "pin-start", "Start");
+  if (pathNodes.length > 1) addMarker(pathNodes[pathNodes.length - 1], "pin-end", "Destination");
+}
+
+function formatDistance(km) {
+  if (km < 1) return `${(km * 1000).toFixed(0)} m (illustrative)`;
+  return `${km.toFixed(3)} km (illustrative)`;
+}
+
+async function findRoute() {
+  if (isBusy || !campusGraph) return;
+  const source = Number(sourceEl.value);
+  const target = Number(targetEl.value);
+  const algorithm = algorithmEl.value;
+
+  if (source === target) {
+    statusEl.textContent = "Choose two different locations.";
+    return;
+  }
+
+  isBusy = true;
+  findButton.disabled = true;
+  statusEl.textContent = "Calculating shortest path…";
 
   try {
-    const response = await fetch(`${API_BASE}/api/route`, {
+    const response = await fetch("/api/route", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        source: Number(sourceSelect.value),
-        target: Number(targetSelect.value),
-        algorithm: selectedAlgorithm
-      })
+      body: JSON.stringify({ source, target, algorithm })
     });
 
-    let result;
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.detail || `Route API returned HTTP ${response.status}`);
 
-    try {
-      result = await response.json();
-    } catch (_) {
-      throw new Error(`Backend returned an invalid response (HTTP ${response.status}).`);
+    if (!result.found) {
+      clearRoute();
+      statusEl.textContent = "No route exists between these locations in the current graph.";
+      resultEl.innerHTML = "<h2>Route details</h2><p>The selected locations are disconnected in graph.json.</p>";
+      return;
     }
 
-    if (!response.ok) {
-      throw new Error(result.detail || `Route calculation failed (HTTP ${response.status}).`);
+    drawRoute(result.nodes);
+    const names = result.nodes.map(node => node.name);
+    const distance = Number(result.distance_km);
+    statusEl.textContent = `Route found · ${formatDistance(distance)} · ${result.explored_nodes} explored vertices`;
+
+    resultEl.replaceChildren();
+    const heading = document.createElement("h2");
+    heading.textContent = "Route details";
+    resultEl.appendChild(heading);
+
+    const details = [
+      ["Algorithm", algorithm === "dijkstra" ? "Dijkstra" : "Bidirectional Dijkstra"],
+      ["Distance", formatDistance(distance)],
+      ["Vertices explored", String(result.explored_nodes)],
+      ["Execution time", `${Number(result.execution_ms).toFixed(4)} ms`],
+      ["Path", names.join(" → ")]
+    ];
+    for (const [label, value] of details) {
+      const p = document.createElement("p");
+      const strong = document.createElement("strong");
+      strong.textContent = `${label}: `;
+      p.append(strong, document.createTextNode(value));
+      resultEl.appendChild(p);
     }
-
-    if (!result.found || !Array.isArray(result.nodes) || result.nodes.length === 0) {
-      throw new Error("No route connects these locations.");
-    }
-
-    routeLayer = L.polyline(result.nodes.map(imageLatLng), {
-      color: "#15803d",
-      weight: 6,
-      opacity: 0.98,
-      lineCap: "round",
-      lineJoin: "round"
-    }).addTo(map);
-
-    map.fitBounds(routeLayer.getBounds().pad(0.18));
-
-    document.getElementById("distance").textContent =
-      Number(result.distance_km).toFixed(2);
-
-    document.getElementById("resultAlgorithm").textContent =
-      result.algorithm === "bidirectional_dijkstra"
-        ? "Bidirectional Dijkstra"
-        : "Dijkstra";
-
-    document.getElementById("explored").textContent = result.explored_nodes;
-    document.getElementById("runtime").textContent =
-      `${Number(result.execution_ms).toFixed(3)} ms`;
-    document.getElementById("pathLength").textContent = result.path.length;
-
-    const list = document.getElementById("pathList");
-    list.innerHTML = "";
-
-    result.nodes.forEach(node => {
-      const item = document.createElement("li");
-      item.textContent = `${node.name} (node ${node.id})`;
-      list.appendChild(item);
-    });
   } catch (error) {
-    errorBox.textContent =
-      error instanceof TypeError
-        ? "Cannot connect to the backend. Make sure FastAPI is running at http://127.0.0.1:8000."
-        : error.message;
+    clearRoute();
+    statusEl.textContent = `Route calculation failed: ${error.message}`;
   } finally {
-    button.disabled = false;
-    button.innerHTML = 'Find route <span>→</span>';
+    isBusy = false;
+    findButton.disabled = false;
   }
-});
+}
 
-document.getElementById("reset").addEventListener("click", () => {
+findButton.addEventListener("click", findRoute);
+resetButton.addEventListener("click", () => {
   clearRoute();
-
-  if (graph) {
-    renderGraph();
-    map.fitBounds(imageBounds);
-  }
+  statusEl.textContent = campusGraph
+    ? "Choose locations and calculate a route."
+    : "Campus graph has not loaded.";
+  resultEl.innerHTML = "<h2>Route details</h2><p>Select a start location and destination to calculate a route.</p>";
 });
 
-map.on("click", event => {
-  if (!graph || graph.nodes.length === 0) return;
-
-  const node = nearestNode(event.latlng);
-
-  if (clickCount % 2 === 0) {
-    sourceSelect.value = String(node.id);
-  } else {
-    targetSelect.value = String(node.id);
-  }
-
-  clickCount++;
-  clearRoute();
-});
-
-loadGraph().catch(error => {
-  errorBox.textContent = error.message;
-});
+loadCampusGraph();

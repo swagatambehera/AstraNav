@@ -1,595 +1,574 @@
 {
   "metadata": {
-    "title": "AstraNav SRM AP Pink-Walkway Campus Graph",
-    "map_mode": "campus-image pixel coordinates",
+    "title": "AstraNav SRM AP Schematic Pedestrian Graph",
     "map_image_size": {
-      "width": 1055,
-      "height": 1414
+      "width": 1106,
+      "height": 1422
     },
-    "source_image_size": {
-      "width": 1529,
-      "height": 2048
-    },
-    "coordinate_note": "POI and junction x/y positions are approximate placements traced from the user-confirmed pink dotted pedestrian paths on the supplied campus map. POIs are placed at walkway access points where possible.",
-    "edge_note": "Edges model the user-confirmed pink dotted pedestrian walkways. A new east-side junction connects the eastern perimeter walkway to the horizontal walkway south of J.C. Bose and X-Lab. Positions and weights remain approximate interpretations of the map and require on-site verification.",
+    "coordinate_note": "Node x/y coordinates use the 1400x1800 graph coordinate canvas, which has the same aspect ratio as the supplied 1106x1422 image. SVG viewBox scales coordinates to the displayed image.",
+    "edge_note": "Edges are the explicit walkable connections drawn on the schematic. All edges are bidirectional.",
     "distance_unit": "illustrative kilometres",
-    "weight_note": "Weights are proportional to image-coordinate segment lengths and are demonstration estimates, not surveyed walking distances.",
-    "routing_note": "The graph includes a candidate route from Dining Complex via the east walkway, J.C. Bose–X-Lab south walkway, X-Lab west walkway, and SR Block walkway. Dijkstra selects the lowest total edge weight; it is not forced to use this route."
+    "warning": "This is an educational schematic based on the user's reference image. Verify official building names, entrances, and walkway connectivity before real navigation."
   },
   "nodes": [
     {
       "id": 0,
-      "name": "Gate 3 / Arrival & Check-In",
+      "name": "Gate 3",
       "category": "Entrance",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 910.8,
-      "y": 621.4
+      "x": 1260,
+      "y": 690,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 1,
-      "name": "S.R. Block 1",
+      "name": "S.R. Block",
       "category": "Academic",
-      "lat": 16.46365,
-      "lon": 80.5064,
-      "x": 293.2,
-      "y": 959.7
+      "x": 470,
+      "y": 1410,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 2,
-      "name": "Sports Ground",
-      "category": "Sports",
-      "lat": 16.46365,
-      "lon": 80.50735,
-      "x": 555.4,
-      "y": 949.3
+      "name": "CV Raman Block",
+      "category": "Academic",
+      "x": 390,
+      "y": 1665,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 3,
       "name": "J.C. Bose Block",
       "category": "Academic",
-      "lat": 16.4641,
-      "lon": 80.5064,
-      "x": 748.6,
-      "y": 714.6
+      "x": 835,
+      "y": 1135,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 4,
       "name": "X-Lab",
-      "category": "Academic / Laboratory",
-      "lat": 16.4641,
-      "lon": 80.50735,
-      "x": 489.9,
-      "y": 721.5
+      "category": "Academic",
+      "x": 580,
+      "y": 1135,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 5,
-      "name": "Central Concourse",
-      "category": "Path Junction",
-      "lat": 16.46455,
-      "lon": 80.50688,
-      "x": 489.9,
-      "y": 621.4
+      "name": "Vikram Sarabhai Block",
+      "category": "Academic",
+      "x": 900,
+      "y": 755,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 6,
-      "name": "Vikram Sarabhai Block",
-      "category": "Academic",
-      "lat": 16.465,
-      "lon": 80.5064,
-      "x": 489.9,
-      "y": 448.8
+      "name": "Vedavathi Hostel",
+      "category": "Hostel",
+      "x": 390,
+      "y": 885,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 7,
-      "name": "Dining Complex",
-      "category": "Dining",
-      "lat": 16.465,
-      "lon": 80.50735,
-      "x": 814.2,
-      "y": 1001.1
+      "name": "Ganga Hostel",
+      "category": "Hostel",
+      "x": 390,
+      "y": 1080,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 8,
-      "name": "Krishna Hostel",
+      "name": "Kaveri Hostel",
       "category": "Hostel",
-      "lat": 16.46275,
-      "lon": 80.50605,
-      "x": 489.9,
-      "y": 241.7
+      "x": 640,
+      "y": 200,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 9,
-      "name": "Ganga Hostel",
-      "category": "Hostel",
-      "lat": 16.46275,
-      "lon": 80.50675,
-      "x": 293.2,
-      "y": 835.4
+      "name": "Health Centre",
+      "category": "Healthcare",
+      "x": 745,
+      "y": 250,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 10,
       "name": "Godavari Hostel",
       "category": "Hostel",
-      "lat": 16.46235,
-      "lon": 80.50605,
-      "x": 489.9,
-      "y": 172.6
+      "x": 640,
+      "y": 320,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 11,
       "name": "Yamuna Hostel",
       "category": "Hostel",
-      "lat": 16.46235,
-      "lon": 80.50675,
-      "x": 779.7,
-      "y": 58.7
+      "x": 1160,
+      "y": 200,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 12,
       "name": "Narmada Hostel",
       "category": "Hostel",
-      "lat": 16.462,
-      "lon": 80.50605,
-      "x": 910.8,
-      "y": 131.2
+      "x": 1160,
+      "y": 320,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 13,
-      "name": "Vedavathi Hostel",
+      "name": "Krishna Hostel",
       "category": "Hostel",
-      "lat": 16.462,
-      "lon": 80.50675,
-      "x": 293.2,
-      "y": 586.9
+      "x": 650,
+      "y": 445,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 14,
-      "name": "Kaveri Hostel",
-      "category": "Hostel",
-      "lat": 16.4617,
-      "lon": 80.5064,
-      "x": 586.5,
-      "y": 51.8
+      "name": "Annapurna Mess",
+      "category": "Dining",
+      "x": 1160,
+      "y": 465,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 15,
-      "name": "Health Centre",
-      "category": "Healthcare",
-      "lat": 16.46315,
-      "lon": 80.50735,
-      "x": 586.5,
-      "y": 110.5
+      "name": "Water Treatment Plant",
+      "category": "Utility",
+      "x": 1210,
+      "y": 935,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 16,
-      "name": "CV Raman Block",
-      "category": "Academic",
-      "lat": 16.4621,
-      "lon": 80.5057,
-      "x": 100.0,
-      "y": 1318.7
+      "name": "Cricket Ground",
+      "category": "Sports",
+      "x": 1020,
+      "y": 1480,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 17,
-      "name": "Cricket Ground",
-      "category": "Sports",
-      "lat": 16.46235,
-      "lon": 80.50715,
-      "x": 910.8,
-      "y": 1208.3
+      "name": "Dining Facility (verify name)",
+      "category": "Dining",
+      "x": 1210,
+      "y": 1310,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 18,
-      "name": "CV Raman Walkway Junction",
-      "category": "Path Junction",
-      "lat": 16.46215,
-      "lon": 80.50595,
-      "x": 207.0,
-      "y": 1311.8
+      "name": "North spine junction",
+      "category": "Junction",
+      "x": 640,
+      "y": 130,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 19,
-      "name": "Southwest Campus Junction",
-      "category": "Path Junction",
-      "lat": 16.4622,
-      "lon": 80.50635,
-      "x": 293.2,
-      "y": 1311.8
+      "name": "Hostel south junction",
+      "category": "Junction",
+      "x": 640,
+      "y": 520,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 20,
-      "name": "SR Block South Junction",
-      "category": "Path Junction",
-      "lat": 16.4624,
-      "lon": 80.50635,
-      "x": 293.2,
-      "y": 959.7
+      "name": "Vikram west junction",
+      "category": "Junction",
+      "x": 640,
+      "y": 650,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 21,
-      "name": "SR Block North Junction",
-      "category": "Path Junction",
-      "lat": 16.4631,
-      "lon": 80.50635,
-      "x": 293.2,
-      "y": 655.9
+      "name": "Gate west junction",
+      "category": "Junction",
+      "x": 640,
+      "y": 690,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 22,
-      "name": "West Campus Main Junction",
-      "category": "Path Junction",
-      "lat": 16.46255,
-      "lon": 80.50635,
-      "x": 489.9,
-      "y": 655.9
+      "name": "Central east-west junction",
+      "category": "Junction",
+      "x": 1260,
+      "y": 690,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 23,
-      "name": "X-Lab West Walkway Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 489.9,
-      "y": 721.5
+      "name": "X-Lab north junction",
+      "category": "Junction",
+      "x": 640,
+      "y": 790,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 24,
-      "name": "North Campus Walkway Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 489.9,
-      "y": 621.4
+      "name": "X-Lab south junction",
+      "category": "Junction",
+      "x": 640,
+      "y": 1190,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 25,
-      "name": "Gate 3 West Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 489.9,
-      "y": 621.4
+      "name": "JC Bose south junction",
+      "category": "Junction",
+      "x": 835,
+      "y": 1190,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 26,
-      "name": "Gate 3 East Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 910.8,
-      "y": 621.4
+      "name": "East campus junction",
+      "category": "Junction",
+      "x": 1260,
+      "y": 1190,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 27,
-      "name": "East Walkway Dining Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 910.8,
-      "y": 1001.1
+      "name": "SR Block north junction",
+      "category": "Junction",
+      "x": 470,
+      "y": 1210,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 28,
-      "name": "Dining Access Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 814.2,
-      "y": 1001.1
+      "name": "SR Block south junction",
+      "category": "Junction",
+      "x": 470,
+      "y": 1580,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 29,
-      "name": "East Walkway South Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 910.8,
-      "y": 1208.3
+      "name": "CV Raman east junction",
+      "category": "Junction",
+      "x": 470,
+      "y": 1665,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 30,
-      "name": "Cricket Ground Access Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 555.4,
-      "y": 1204.8
+      "name": "West campus junction",
+      "category": "Junction",
+      "x": 390,
+      "y": 1210,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 31,
-      "name": "Hostel West Walkway Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 489.9,
-      "y": 241.7
+      "name": "Hostel west junction",
+      "category": "Junction",
+      "x": 390,
+      "y": 520,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 32,
-      "name": "Hostel North Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 489.9,
-      "y": 51.8
+      "name": "Sports west junction",
+      "category": "Junction",
+      "x": 640,
+      "y": 1480,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 33,
-      "name": "Hostel East North Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 910.8,
-      "y": 51.8
+      "name": "Dining east junction",
+      "category": "Junction",
+      "x": 1260,
+      "y": 1310,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 34,
-      "name": "Hostel East South Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 910.8,
-      "y": 241.7
+      "name": "Annapurna access junction",
+      "category": "Junction",
+      "x": 1260,
+      "y": 465,
+      "lat": 0,
+      "lon": 0
     },
     {
       "id": 35,
-      "name": "J.C. Bose–X-Lab South Walkway Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 748.6,
-      "y": 887.2
-    },
-    {
-      "id": 36,
-      "name": "Reserved duplicate junction (unused)",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 748.6,
-      "y": 887.2
-    },
-    {
-      "id": 37,
-      "name": "X-Lab South Walkway Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 489.9,
-      "y": 887.2
-    },
-    {
-      "id": 38,
-      "name": "East X-Lab South Walkway Junction",
-      "category": "Path Junction",
-      "lat": 16.4632,
-      "lon": 80.5064,
-      "x": 910.8,
-      "y": 887.2
+      "name": "Vikram east junction",
+      "category": "Junction",
+      "x": 1260,
+      "y": 650,
+      "lat": 0,
+      "lon": 0
     }
   ],
   "edges": [
     {
-      "from": 16,
+      "from": 8,
       "to": 18,
-      "weight": 0.059,
+      "weight": 0.035,
       "bidirectional": true
     },
     {
       "from": 18,
+      "to": 9,
+      "weight": 0.08,
+      "bidirectional": true
+    },
+    {
+      "from": 18,
+      "to": 10,
+      "weight": 0.095,
+      "bidirectional": true
+    },
+    {
+      "from": 18,
+      "to": 11,
+      "weight": 0.262,
+      "bidirectional": true
+    },
+    {
+      "from": 11,
+      "to": 12,
+      "weight": 0.06,
+      "bidirectional": true
+    },
+    {
+      "from": 12,
+      "to": 34,
+      "weight": 0.088,
+      "bidirectional": true
+    },
+    {
+      "from": 34,
+      "to": 14,
+      "weight": 0.05,
+      "bidirectional": true
+    },
+    {
+      "from": 34,
+      "to": 35,
+      "weight": 0.092,
+      "bidirectional": true
+    },
+    {
+      "from": 10,
+      "to": 13,
+      "weight": 0.063,
+      "bidirectional": true
+    },
+    {
+      "from": 13,
       "to": 19,
-      "weight": 0.047,
+      "weight": 0.038,
+      "bidirectional": true
+    },
+    {
+      "from": 19,
+      "to": 31,
+      "weight": 0.125,
+      "bidirectional": true
+    },
+    {
+      "from": 31,
+      "to": 6,
+      "weight": 0.182,
+      "bidirectional": true
+    },
+    {
+      "from": 31,
+      "to": 7,
+      "weight": 0.28,
       "bidirectional": true
     },
     {
       "from": 19,
       "to": 20,
-      "weight": 0.194,
+      "weight": 0.065,
+      "bidirectional": true
+    },
+    {
+      "from": 20,
+      "to": 5,
+      "weight": 0.14,
       "bidirectional": true
     },
     {
       "from": 20,
       "to": 21,
-      "weight": 0.167,
+      "weight": 0.02,
       "bidirectional": true
     },
     {
       "from": 21,
+      "to": 0,
+      "weight": 0.31,
+      "bidirectional": true
+    },
+    {
+      "from": 0,
       "to": 22,
-      "weight": 0.108,
-      "bidirectional": true
-    },
-    {
-      "from": 22,
-      "to": 24,
-      "weight": 0.019,
-      "bidirectional": true
-    },
-    {
-      "from": 24,
-      "to": 25,
-      "weight": 0.005,
-      "bidirectional": true
-    },
-    {
-      "from": 25,
-      "to": 26,
-      "weight": 0.231,
-      "bidirectional": true
-    },
-    {
-      "from": 26,
-      "to": 27,
-      "weight": 0.209,
-      "bidirectional": true
-    },
-    {
-      "from": 27,
-      "to": 28,
-      "weight": 0.053,
-      "bidirectional": true
-    },
-    {
-      "from": 28,
-      "to": 7,
       "weight": 0.005,
       "bidirectional": true
     },
     {
       "from": 22,
+      "to": 35,
+      "weight": 0.02,
+      "bidirectional": true
+    },
+    {
+      "from": 35,
+      "to": 5,
+      "weight": 0.188,
+      "bidirectional": true
+    },
+    {
+      "from": 21,
       "to": 23,
-      "weight": 0.036,
+      "weight": 0.05,
       "bidirectional": true
     },
     {
       "from": 23,
       "to": 4,
-      "weight": 0.005,
+      "weight": 0.175,
       "bidirectional": true
     },
     {
       "from": 23,
-      "to": 37,
-      "weight": 0.091,
+      "to": 24,
+      "weight": 0.2,
       "bidirectional": true
     },
     {
-      "from": 37,
-      "to": 35,
-      "weight": 0.142,
+      "from": 24,
+      "to": 25,
+      "weight": 0.098,
       "bidirectional": true
     },
     {
-      "from": 35,
+      "from": 25,
       "to": 3,
-      "weight": 0.095,
+      "weight": 0.028,
       "bidirectional": true
     },
     {
-      "from": 27,
-      "to": 29,
-      "weight": 0.114,
+      "from": 25,
+      "to": 26,
+      "weight": 0.212,
       "bidirectional": true
     },
     {
-      "from": 29,
+      "from": 26,
+      "to": 15,
+      "weight": 0.13,
+      "bidirectional": true
+    },
+    {
+      "from": 26,
+      "to": 33,
+      "weight": 0.06,
+      "bidirectional": true
+    },
+    {
+      "from": 33,
       "to": 17,
-      "weight": 0.005,
+      "weight": 0.025,
       "bidirectional": true
     },
     {
-      "from": 29,
-      "to": 30,
-      "weight": 0.195,
+      "from": 33,
+      "to": 16,
+      "weight": 0.147,
+      "bidirectional": true
+    },
+    {
+      "from": 32,
+      "to": 16,
+      "weight": 0.19,
+      "bidirectional": true
+    },
+    {
+      "from": 24,
+      "to": 32,
+      "weight": 0.145,
       "bidirectional": true
     },
     {
       "from": 30,
-      "to": 2,
-      "weight": 0.141,
+      "to": 7,
+      "weight": 0.065,
       "bidirectional": true
     },
     {
-      "from": 20,
-      "to": 1,
-      "weight": 0.005,
-      "bidirectional": true
-    },
-    {
-      "from": 21,
-      "to": 9,
-      "weight": 0.099,
-      "bidirectional": true
-    },
-    {
-      "from": 21,
-      "to": 13,
-      "weight": 0.038,
-      "bidirectional": true
-    },
-    {
-      "from": 24,
-      "to": 31,
-      "weight": 0.209,
-      "bidirectional": true
-    },
-    {
-      "from": 31,
-      "to": 32,
-      "weight": 0.104,
-      "bidirectional": true
-    },
-    {
-      "from": 32,
-      "to": 14,
-      "weight": 0.053,
-      "bidirectional": true
-    },
-    {
-      "from": 32,
-      "to": 10,
-      "weight": 0.066,
-      "bidirectional": true
-    },
-    {
-      "from": 31,
-      "to": 8,
-      "weight": 0.005,
-      "bidirectional": true
-    },
-    {
-      "from": 32,
-      "to": 33,
-      "weight": 0.231,
-      "bidirectional": true
-    },
-    {
-      "from": 33,
-      "to": 11,
-      "weight": 0.072,
-      "bidirectional": true
-    },
-    {
-      "from": 33,
-      "to": 12,
-      "weight": 0.044,
-      "bidirectional": true
-    },
-    {
-      "from": 33,
-      "to": 34,
-      "weight": 0.104,
-      "bidirectional": true
-    },
-    {
-      "from": 34,
-      "to": 26,
-      "weight": 0.209,
-      "bidirectional": true
-    },
-    {
-      "from": 32,
-      "to": 15,
-      "weight": 0.062,
-      "bidirectional": true
-    },
-    {
-      "from": 24,
-      "to": 6,
-      "weight": 0.095,
+      "from": 30,
+      "to": 27,
+      "weight": 0.04,
       "bidirectional": true
     },
     {
       "from": 27,
-      "to": 38,
-      "weight": 0.063,
+      "to": 1,
+      "weight": 0.1,
       "bidirectional": true
     },
     {
-      "from": 38,
-      "to": 35,
-      "weight": 0.089,
+      "from": 27,
+      "to": 28,
+      "weight": 0.185,
+      "bidirectional": true
+    },
+    {
+      "from": 28,
+      "to": 29,
+      "weight": 0.043,
+      "bidirectional": true
+    },
+    {
+      "from": 29,
+      "to": 2,
+      "weight": 0.04,
+      "bidirectional": true
+    },
+    {
+      "from": 24,
+      "to": 27,
+      "weight": 0.086,
       "bidirectional": true
     }
   ]
