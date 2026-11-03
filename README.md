@@ -1,128 +1,106 @@
 # AstraNav — Graph-Based Campus Navigation
 
-AstraNav is an educational campus navigation web application that demonstrates and compares shortest-path algorithms using a **C++17 graph engine**, a **FastAPI backend**, and an interactive web-based campus map.
+AstraNav is a graph-based campus navigation web application that demonstrates shortest-path algorithms using a **C++17 algorithm engine**, **Python FastAPI backend**, and an interactive web interface.
 
-The project is designed to demonstrate how graph algorithms can be applied to campus navigation by calculating and visualizing routes between selected locations.
+It models campus locations as vertices and pedestrian connections as weighted edges, allowing users to calculate, visualize, and compare shortest routes between locations.
 
-## Features
+## Key Features
 
-- Interactive campus map with source and destination selection.
-- Shortest-path calculation using Dijkstra’s and Bidirectional Dijkstra algorithms.
-- Route visualization using an SVG overlay on the campus map.
-- Displays route distance, explored nodes, and execution time.
-- FastAPI backend integrated with a C++17 algorithm engine.
-- Centralized graph data stored in JSON.
-- API validation for graph nodes, edges, and calculated routes.
+- **Interactive Campus Map:** Select source and destination locations.
+- **Shortest-Path Algorithms:** Calculate routes using Dijkstra's and Bidirectional Dijkstra algorithms.
+- **Route Visualization:** Display the calculated path over the campus map using SVG.
+- **Algorithm Comparison:** View explored nodes and execution time.
+- **Distance Calculation:** Display the total route weight.
+- **C++ Integration:** Execute graph algorithms through a compiled C++17 engine.
+- **Centralized Graph Data:** Store campus locations and connections in JSON.
+- **REST API:** Communicate between the frontend and algorithm engine through FastAPI.
 
 ## Tech Stack
 
-| Component | Technology |
+| Layer | Technologies |
 |---|---|
 | Frontend | HTML, CSS, JavaScript |
 | Backend | Python, FastAPI |
 | Algorithm Engine | C++17 |
-| Graph Data | JSON |
-| Route Visualization | SVG |
+| Graph Storage | JSON |
+| Visualization | SVG |
 | API Server | Uvicorn |
 
-## Algorithms
+## Algorithms Implemented
 
-### 1. Dijkstra’s Algorithm
+### 1. Dijkstra's Algorithm
 
-Dijkstra’s Algorithm is a greedy shortest-path algorithm used to find the minimum-cost path between a source and destination in a weighted graph with non-negative edge weights.
+Dijkstra's Algorithm is a greedy shortest-path algorithm that finds the minimum-cost path from a source vertex to other reachable vertices in a weighted graph with non-negative edge weights.
 
-**Working principle:**
-- Starts from the selected source node.
-- Maintains the shortest known distance to each node.
-- Selects the unvisited node with the minimum tentative distance.
-- Relaxes its adjacent edges.
-- Continues until the destination is reached or no reachable nodes remain.
+**Approach:**
+1. Initialize the source distance to zero and all other distances to infinity.
+2. Select the unvisited vertex with the smallest tentative distance using a priority queue.
+3. Relax its adjacent edges.
+4. Update distances and parent information when a shorter path is found.
+5. Reconstruct the shortest path using the parent information.
 
-**Time Complexity:** \(O((V+E)\log V)\) using a priority queue and adjacency list.
+**Time Complexity:** \(O((V+E)\log V)\) using an adjacency list and priority queue.
 
-### 2. Bidirectional Dijkstra’s Algorithm
+### 2. Bidirectional Dijkstra
 
-Bidirectional Dijkstra improves the search process by running two Dijkstra searches simultaneously:
+Bidirectional Dijkstra performs two simultaneous shortest-path searches:
 
-- Forward search starts from the source.
-- Backward search starts from the destination.
-- Both searches expand through the graph.
-- The algorithm identifies the best connecting route between the two searches.
+- A forward search from the source.
+- A backward search from the destination.
 
-It can reduce the explored search space in suitable graphs, although the actual performance depends on graph structure and implementation.
+The searches meet in the graph, allowing the algorithm to determine the shortest route while potentially exploring fewer vertices than a conventional one-directional search.
 
 **Time Complexity:** \(O((V+E)\log V)\) as a worst-case upper bound.
 
-## Requirements
+The actual performance improvement depends on the graph structure and search conditions.
 
-- Python 3.10 or higher.
-- C++17 compatible compiler (`g++`).
-- pip package manager.
-- Internet connection if external map resources are used.
+## System Architecture
 
-## Installation & Setup
-
-### Windows (PowerShell)
-
-Run these commands from the project root directory:
-
-```powershell
-# Create a virtual environment
-py -m venv .venv
-
-# Activate the environment
-.\.venv\Scripts\Activate.ps1
-
-# Install Python dependencies
-pip install -r backend\requirements.txt
-
-# Compile the C++ algorithm engine
-g++ -std=c++17 -O2 -Wall -Wextra -pedantic cpp-engine\src\main.cpp -o cpp-engine\route_engine.exe
-
-# Start the FastAPI server
-python -m uvicorn backend.main:app --reload
+```text
+             User
+              |
+              v
+      Frontend (HTML/CSS/JS)
+              |
+              | HTTP Request
+              v
+       FastAPI Backend
+              |
+              | Load Graph / Validate Request
+              v
+          graph.json
+              |
+              v
+       C++17 Algorithm Engine
+              |
+        +-----+------+
+        |            |
+        v            v
+     Dijkstra   Bidirectional
+                  Dijkstra
+        |            |
+        +-----+------+
+              |
+              v
+       Route + Metrics
+              |
+              v
+        FastAPI Backend
+              |
+              v
+       Frontend Visualization
 ```
 
-### Linux / macOS
+## How It Works
 
-Run these commands from the project root directory:
-
-```bash
-# Create a virtual environment
-python3 -m venv .venv
-
-# Activate the environment
-source .venv/bin/activate
-
-# Install Python dependencies
-pip install -r backend/requirements.txt
-
-# Compile the C++ algorithm engine
-g++ -std=c++17 -O2 -Wall -Wextra -pedantic cpp-engine/src/main.cpp -o cpp-engine/route_engine
-
-# Start the FastAPI server
-python3 -m uvicorn backend.main:app --reload
-```
-
-## Access the Application
-
-After starting the FastAPI server, open:
-
-**Application:** http://127.0.0.1:8000
-
-**API Documentation:** http://127.0.0.1:8000/docs
-
-The FastAPI backend serves the frontend and API from the same application, so a separate frontend development server is not required.
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/` | Serves the frontend application |
-| GET | `/api/health` | Checks backend and engine status |
-| GET | `/api/graph` | Retrieves campus graph data |
-| POST | `/api/route` | Calculates a shortest path |
-| GET | `/docs` | Opens interactive API documentation |
+1. The frontend retrieves campus graph data from the FastAPI backend.
+2. The user selects a source and destination.
+3. The frontend sends a route request to the backend.
+4. FastAPI validates the request and invokes the C++17 executable.
+5. The C++ engine executes the selected shortest-path algorithm.
+6. The engine returns the calculated path and performance metrics.
+7. The backend validates and returns the result.
+8. JavaScript visualizes the route on the campus map using an SVG overlay.
 
 ## Project Structure
 
@@ -154,46 +132,148 @@ AstraNav/
 └── README.md
 ```
 
-## How It Works
+## Installation and Setup
 
-1. The frontend loads the campus graph from the FastAPI backend.
-2. The user selects a source and destination.
-3. The frontend sends a route calculation request to the backend.
-4. FastAPI validates the request and invokes the compiled C++ engine.
-5. The C++ engine executes the selected shortest-path algorithm.
-6. The calculated path and performance information are returned to the frontend.
-7. JavaScript displays the route on the campus map using an SVG overlay.
+### Prerequisites
 
-## DAA Concepts Demonstrated
+Make sure you have installed:
 
-- Graph representation using adjacency lists.
-- Weighted and undirected graphs.
-- Greedy algorithm design.
-- Bidirectional search.
-- Edge relaxation.
-- Priority queues.
-- Path reconstruction.
-- Time and space complexity analysis.
+- Python 3.10 or higher
+- C++17 compatible compiler (`g++`)
+- pip
+- Git (optional, for cloning the repository)
 
-## Testing
+### Windows (PowerShell)
+
+Run the following commands from the project root directory:
+
+```powershell
+# Create a virtual environment
+py -m venv .venv
+
+# Activate the environment
+.\.venv\Scripts\Activate.ps1
+
+# Install dependencies
+pip install -r backend\requirements.txt
+
+# Compile the C++ algorithm engine
+g++ -std=c++17 -O2 -Wall -Wextra -pedantic cpp-engine\src\main.cpp -o cpp-engine\route_engine.exe
+
+# Start the FastAPI server
+python -m uvicorn backend.main:app --reload
+```
+
+### Linux / macOS
+
+```bash
+# Create a virtual environment
+python3 -m venv .venv
+
+# Activate the environment
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r backend/requirements.txt
+
+# Compile the C++ algorithm engine
+g++ -std=c++17 -O2 -Wall -Wextra -pedantic cpp-engine/src/main.cpp -o cpp-engine/route_engine
+
+# Start the FastAPI server
+python3 -m uvicorn backend.main:app --reload
+```
+
+## Access the Application
+
+After starting the FastAPI server, open:
+
+- **Application:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
+- **API Documentation (Swagger UI):** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+The backend serves both the frontend and API, so a separate frontend development server is not required.
+
+> These are local development URLs. They work while the server is running on your machine.
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/` | Serves the frontend application |
+| GET | `/api/health` | Checks backend and engine status |
+| GET | `/api/graph` | Retrieves campus graph data |
+| POST | `/api/route` | Calculates a shortest path |
+| GET | `/docs` | Interactive API documentation |
+
+## Graph Representation
+
+The campus is represented as a weighted graph:
+
+\[
+G=(V,E)
+\]
+
+Where:
+
+- \(V\) represents campus locations (vertices).
+- \(E\) represents pedestrian connections (edges).
+- \(w(u,v)\) represents the weight of the connection between two vertices.
+
+The graph is stored in `cpp-engine/data/graph.json` and loaded by the backend.
+
+**Current graph statistics:**
+
+| Metric | Value |
+|---|---:|
+| Vertices | 36 |
+| Edges | 39 |
+| Graph Type | Weighted, undirected |
+| Storage Format | JSON |
+| Edge Weights | Illustrative kilometres |
+
+## Testing and Validation
 
 The project includes graph validation tests and an algorithm comparison report.
 
-The supplied graph contains:
-- 36 vertices (campus locations).
-- 39 edges (connections).
+The two algorithms were tested across all **1,260 ordered source-destination pairs** in the supplied graph.
 
-The two algorithms were compared across all 1,260 ordered source-destination pairs with no shortest-distance mismatches in the tested graph.
+| Validation | Result |
+|---|---|
+| Reachability mismatches | 0 |
+| Shortest-distance mismatches | 0 |
+| Ordered source-destination pairs tested | 1,260 |
+| C++ compilation | Passed |
+| Frontend JavaScript syntax check | Passed |
+| FastAPI endpoint checks | Passed |
 
-Refer to `tests/TEST_REPORT.md` for the detailed validation results.
+For detailed results, see [`tests/TEST_REPORT.md`](tests/TEST_REPORT.md).
+
+## DAA Concepts Demonstrated
+
+- Graph theory and adjacency lists
+- Weighted and undirected graphs
+- Greedy algorithm design
+- Bidirectional search
+- Priority queues
+- Edge relaxation
+- Shortest-path reconstruction
+- Time and space complexity analysis
+- Algorithm performance comparison
 
 ## Limitations
 
-- Campus nodes, coordinates, and edge weights are illustrative and have not been independently verified against actual walking distances.
-- The campus map is used as a visual background; routing is performed using the JSON graph, not by a map provider.
-- The graph currently models the supplied connections and does not guarantee that every real-world pedestrian walkway is represented.
-- Execution times on small graphs can vary and should not be treated as reliable performance benchmarks.
-- Bidirectional Dijkstra's performance advantage depends on the graph structure and search conditions.
+- Campus nodes, coordinates, and edge weights are illustrative and have not been independently verified against actual pedestrian routes.
+- The campus map is used as a visual background; route calculation is performed using the JSON graph.
+- The current graph represents the supplied campus connections and may not include every real-world pedestrian walkway.
+- Execution times on small graphs vary and should not be treated as reliable benchmarks.
+- Bidirectional Dijkstra does not guarantee fewer explored nodes for every source-destination pair.
+
+## Future Improvements
+
+- Verify campus coordinates and walking distances against actual campus paths.
+- Expand the graph to cover additional campus locations and pedestrian connections.
+- Add route alternatives and improved route comparison.
+- Introduce accessibility-aware routing and obstacle handling.
+- Improve algorithm benchmarking using larger graphs.
 
 ---
 
