@@ -15,6 +15,9 @@ async function loadCampusGraph() {
     const response = await fetch("/api/graph");
     if (!response.ok) throw new Error(`Graph API returned HTTP ${response.status}`);
     campusGraph = await response.json();
+    const canvas = campusGraph.metadata?.coordinate_canvas || { width: 1400, height: 1800 };
+    svg.setAttribute("viewBox", `0 0 ${canvas.width} ${canvas.height}`);
+    svg.setAttribute("preserveAspectRatio", "none");
 
     const destinations = campusGraph.nodes.filter(
       node => node.category !== "Junction" && !/junction/i.test(node.name)
@@ -69,7 +72,7 @@ function drawRoute(pathNodes) {
     circle.setAttribute("cx", node.x);
     circle.setAttribute("cy", node.y);
     circle.setAttribute("r", "15");
-    circle.setAttribute("class", className);
+    circle.setAttribute("class", `pin ${className}`);
     const title = document.createElementNS(ns, "title");
     title.textContent = `${label}: ${node.name}`;
     circle.appendChild(title);
@@ -116,6 +119,19 @@ async function findRoute() {
       statusEl.textContent = "No route exists between these locations in the current graph.";
       resultEl.innerHTML = "<h2>Route details</h2><p>The selected locations are disconnected in graph.json.</p>";
       return;
+    }
+
+    // Guard against malformed paths: every consecutive pair must be a graph edge.
+    const edgeSet = new Set(campusGraph.edges.map(edge =>
+      `${Math.min(edge.from, edge.to)}:${Math.max(edge.from, edge.to)}`
+    ));
+    for (let i = 1; i < result.nodes.length; i++) {
+      const a = result.nodes[i - 1].id;
+      const b = result.nodes[i].id;
+      const key = `${Math.min(a, b)}:${Math.max(a, b)}`;
+      if (!edgeSet.has(key)) {
+        throw new Error(`The returned path contains a non-existent graph connection (${a} → ${b}).`);
+      }
     }
 
     drawRoute(result.nodes);
