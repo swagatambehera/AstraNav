@@ -1,0 +1,3 @@
+algorithm,queries_completed,path_validity_percent,path_valid_pairs,path_cost_mismatches_vs_dijkstra,mean_explored_vertices,mean_execution_time_ms,execution_time_stdev_ms,timing_repetitions_per_measurement,unreachable_queries
+dijkstra,1260,100.0000,1260,0,19.000000,0.001211387294,0.000378177927,10000,0
+bidirectional_dijkstra,1260,100.0000,1260,0,13.593651,0.001577019508,0.000426942346,10000,0

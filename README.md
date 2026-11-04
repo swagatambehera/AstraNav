@@ -1,110 +1,121 @@
-# AstraNav — Graph-Based Campus Navigation
+# AstraNav --- Graph-Based Campus Navigation
 
-AstraNav is a graph-based campus navigation web application that demonstrates shortest-path algorithms using a **C++17 algorithm engine**, **Python FastAPI backend**, and an interactive web interface.
+AstraNav is a graph-based campus navigation application developed to
+demonstrate and compare shortest-path algorithms. It combines a **C++17
+algorithm engine**, a **Python FastAPI backend**, and an interactive
+**HTML/CSS/JavaScript frontend**.
 
-It models campus locations as vertices and pedestrian connections as weighted edges, allowing users to calculate, visualize, and compare shortest routes between locations.
+Campus locations are represented as graph vertices and connections as
+weighted edges. Users can select a source and destination, calculate a
+route, and compare the behavior of Dijkstra's algorithm and
+Bidirectional Dijkstra.
 
-## Key Features
+> **Research note:** The supplied graph is a schematic model. Its edge
+> weights are illustrative kilometres, not independently surveyed
+> pedestrian distances. Algorithmic correctness on this graph does not
+> establish the accuracy of real-world campus routes.
 
-- **Interactive Campus Map:** Select source and destination locations.
-- **Shortest-Path Algorithms:** Calculate routes using Dijkstra's and Bidirectional Dijkstra algorithms.
-- **Route Visualization:** Display the calculated path over the campus map using SVG.
-- **Algorithm Comparison:** View explored nodes and execution time.
-- **Distance Calculation:** Display the total route weight.
-- **C++ Integration:** Execute graph algorithms through a compiled C++17 engine.
-- **Centralized Graph Data:** Store campus locations and connections in JSON.
-- **REST API:** Communicate between the frontend and algorithm engine through FastAPI.
+## Features
 
-## Tech Stack
+-   Interactive campus map with source and destination selection.
+-   Shortest-path calculation using Dijkstra's algorithm and
+    Bidirectional Dijkstra.
+-   SVG-based route visualization over the campus map.
+-   Comparison of explored vertices and execution time.
+-   C++17 shortest-path engine integrated with a FastAPI backend.
+-   Centralized graph data stored in JSON.
+-   REST API endpoints for graph retrieval, health checks, and route
+    calculation.
 
-| Layer | Technologies |
-|---|---|
-| Frontend | HTML, CSS, JavaScript |
-| Backend | Python, FastAPI |
-| Algorithm Engine | C++17 |
-| Graph Storage | JSON |
-| Visualization | SVG |
-| API Server | Uvicorn |
+## Technology Stack
 
-## Algorithms Implemented
+  Layer              Technology
+  ------------------ -----------------------
+  Frontend           HTML, CSS, JavaScript
+  Backend            Python, FastAPI
+  Algorithm engine   C++17
+  Graph storage      JSON
+  Route overlay      SVG
+  ASGI server        Uvicorn
 
-### 1. Dijkstra's Algorithm
+## Algorithms
 
-Dijkstra's Algorithm is a greedy shortest-path algorithm that finds the minimum-cost path from a source vertex to other reachable vertices in a weighted graph with non-negative edge weights.
+### Dijkstra's Algorithm
 
-**Approach:**
-1. Initialize the source distance to zero and all other distances to infinity.
-2. Select the unvisited vertex with the smallest tentative distance using a priority queue.
-3. Relax its adjacent edges.
-4. Update distances and parent information when a shorter path is found.
-5. Reconstruct the shortest path using the parent information.
+Dijkstra's algorithm computes minimum-cost paths from a source vertex in
+a weighted graph with non-negative edge weights. AstraNav uses an
+adjacency-list representation and a min-priority queue.
 
-**Time Complexity:** \(O((V+E)\log V)\) using an adjacency list and priority queue.
+High-level process:
 
-### 2. Bidirectional Dijkstra
+1.  Set the source distance to zero and all other distances to infinity.
+2.  Extract the vertex with the smallest tentative distance.
+3.  Relax its outgoing edges.
+4.  Update distance and parent information when a shorter path is found.
+5.  Reconstruct the route using the parent information.
 
-Bidirectional Dijkstra performs two simultaneous shortest-path searches:
+With an adjacency list and binary heap, the expected time complexity is:
 
-- A forward search from the source.
-- A backward search from the destination.
+\[ O((\|V\|+\|E\|)`\log `{=tex}\|V\|) \]
 
-The searches meet in the graph, allowing the algorithm to determine the shortest route while potentially exploring fewer vertices than a conventional one-directional search.
+### Bidirectional Dijkstra
 
-**Time Complexity:** \(O((V+E)\log V)\) as a worst-case upper bound.
+Bidirectional Dijkstra performs two coordinated searches:
 
-The actual performance improvement depends on the graph structure and search conditions.
+-   A forward search from the source.
+-   A backward search from the destination, using reverse adjacency.
 
-## System Architecture
+The implementation maintains separate distance information,
+parent/successor information, settled sets, and priority queues for the
+two directions. It expands the frontier with the smaller minimum
+tentative distance, updates the best known connecting path, and stops
+when the sum of the minimum tentative distances is no smaller than the
+best known path cost.
 
-```text
-             User
-              |
-              v
-      Frontend (HTML/CSS/JS)
-              |
-              | HTTP Request
-              v
-       FastAPI Backend
-              |
-              | Load Graph / Validate Request
-              v
-          graph.json
-              |
-              v
-       C++17 Algorithm Engine
-              |
-        +-----+------+
-        |            |
-        v            v
-     Dijkstra   Bidirectional
-                  Dijkstra
-        |            |
-        +-----+------+
-              |
-              v
-       Route + Metrics
-              |
-              v
-        FastAPI Backend
-              |
-              v
-       Frontend Visualization
+Its worst-case asymptotic time complexity with binary heaps remains:
+
+\[ O((\|V\|+\|E\|)`\log `{=tex}\|V\|) \]
+
+Bidirectional search can reduce the number of explored vertices, but it
+does not guarantee lower execution time for every graph or query.
+
+## Architecture
+
+``` text
+User
+ |
+ v
+Frontend (HTML / CSS / JavaScript)
+ |
+ | HTTP request
+ v
+FastAPI backend
+ |
+ | Validate request / access graph
+ v
+JSON graph
+ |
+ v
+C++17 algorithm engine
+ |                     |
+ v                     v
+Dijkstra       Bidirectional Dijkstra
+ |                     |
+ +----------+----------+
+            |
+            v
+      Route and metrics
+            |
+            v
+      FastAPI response
+            |
+            v
+      SVG map visualization
 ```
-
-## How It Works
-
-1. The frontend retrieves campus graph data from the FastAPI backend.
-2. The user selects a source and destination.
-3. The frontend sends a route request to the backend.
-4. FastAPI validates the request and invokes the C++17 executable.
-5. The C++ engine executes the selected shortest-path algorithm.
-6. The engine returns the calculated path and performance metrics.
-7. The backend validates and returns the result.
-8. JavaScript visualizes the route on the campus map using an SVG overlay.
 
 ## Project Structure
 
-```text
+``` text
 AstraNav/
 │
 ├── backend/
@@ -126,155 +137,286 @@ AstraNav/
 │
 ├── tests/
 │   ├── test_graph.py
-│   └── TEST_REPORT.md
+│   ├── TEST_REPORT.md
+│   └── benchmarks/
+│       ├── astranav_benchmark.py
+│       ├── plot_benchmark.py
+│       ├── benchmark_raw.csv
+│       ├── benchmark_summary.csv
+│       └── benchmark_comparison.csv
+│
+├── docs/
+│   └── screenshots/
+│       ├── benchmark_execution.png
+│       └── algorithm_comparison.png
+│
+├── paper/
+│   ├── main.tex
+│   ├── references.bib
+│   └── AstraNav.pdf
 │
 ├── .gitignore
 └── README.md
 ```
 
+The `benchmarks/`, `docs/`, and `paper/` files shown above should be
+included when present in your local repository. The C++ executable is
+generated during setup and should not be committed as a
+platform-specific binary.
+
+## Prerequisites
+
+Install the following:
+
+-   Python 3.10 or later
+-   A C++17-compatible compiler such as `g++`
+-   `pip`
+-   Node.js (only if you want to run the JavaScript syntax check)
+-   Git (optional)
+
 ## Installation and Setup
 
-### Prerequisites
-
-Make sure you have installed:
-
-- Python 3.10 or higher
-- C++17 compatible compiler (`g++`)
-- pip
-- Git (optional, for cloning the repository)
+Run commands from the AstraNav project root.
 
 ### Windows (PowerShell)
 
-Run the following commands from the project root directory:
+Create and activate a virtual environment:
 
-```powershell
-# Create a virtual environment
+``` powershell
 py -m venv .venv
-
-# Activate the environment
 .\.venv\Scripts\Activate.ps1
+```
 
-# Install dependencies
+Install backend dependencies:
+
+``` powershell
 pip install -r backend\requirements.txt
+```
 
-# Compile the C++ algorithm engine
+Compile the C++ engine:
+
+``` powershell
 g++ -std=c++17 -O2 -Wall -Wextra -pedantic cpp-engine\src\main.cpp -o cpp-engine\route_engine.exe
+```
 
-# Start the FastAPI server
+Start the FastAPI server:
+
+``` powershell
 python -m uvicorn backend.main:app --reload
 ```
 
 ### Linux / macOS
 
-```bash
-# Create a virtual environment
+Create and activate a virtual environment:
+
+``` bash
 python3 -m venv .venv
-
-# Activate the environment
 source .venv/bin/activate
+```
 
-# Install dependencies
+Install backend dependencies:
+
+``` bash
 pip install -r backend/requirements.txt
+```
 
-# Compile the C++ algorithm engine
+Compile the C++ engine:
+
+``` bash
 g++ -std=c++17 -O2 -Wall -Wextra -pedantic cpp-engine/src/main.cpp -o cpp-engine/route_engine
+```
 
-# Start the FastAPI server
+Start the FastAPI server:
+
+``` bash
 python3 -m uvicorn backend.main:app --reload
 ```
 
 ## Access the Application
 
-After starting the FastAPI server, open:
+When the server is running locally:
 
-- **Application:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
-- **API Documentation (Swagger UI):** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+-   Application: <http://127.0.0.1:8000>
+-   FastAPI Swagger documentation: <http://127.0.0.1:8000/docs>
 
-The backend serves both the frontend and API, so a separate frontend development server is not required.
-
-> These are local development URLs. They work while the server is running on your machine.
+The backend serves the frontend, so a separate frontend development
+server is not required for the documented setup.
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/` | Serves the frontend application |
-| GET | `/api/health` | Checks backend and engine status |
-| GET | `/api/graph` | Retrieves campus graph data |
-| POST | `/api/route` | Calculates a shortest path |
-| GET | `/docs` | Interactive API documentation |
+  Method   Endpoint        Purpose
+  -------- --------------- ---------------------------------------
+  GET      `/`             Serves the frontend
+  GET      `/api/health`   Checks backend/engine health
+  GET      `/api/graph`    Returns campus graph data
+  POST     `/api/route`    Calculates a shortest path
+  GET      `/docs`         FastAPI interactive API documentation
 
 ## Graph Representation
 
-The campus is represented as a weighted graph:
+AstraNav models the campus as a weighted graph:
 
-\[
-G=(V,E)
-\]
+\[ G=(V,E) \]
 
-Where:
+-   (V): campus locations represented as vertices.
+-   (E): connections represented as edges.
+-   (w(u,v)): weight assigned to a connection.
 
-- \(V\) represents campus locations (vertices).
-- \(E\) represents pedestrian connections (edges).
-- \(w(u,v)\) represents the weight of the connection between two vertices.
+The graph is stored in `cpp-engine/data/graph.json`.
 
-The graph is stored in `cpp-engine/data/graph.json` and loaded by the backend.
+### Supplied graph statistics
 
-**Current graph statistics:**
+  Property                                Value
+  ------------------- -------------------------
+  Vertices                                   36
+  JSON edge records                          39
+  Representation                 Weighted graph
+  Storage                                  JSON
+  Edge weights          Illustrative kilometres
 
-| Metric | Value |
-|---|---:|
-| Vertices | 36 |
-| Edges | 39 |
-| Graph Type | Weighted, undirected |
-| Storage Format | JSON |
-| Edge Weights | Illustrative kilometres |
+The `bidirectional` property in the graph data determines whether a
+connection is traversable in both directions. The JSON file is the
+source of truth for graph connectivity.
 
-## Testing and Validation
+## Benchmarking and Validation
 
-The project includes graph validation tests and an algorithm comparison report.
+The benchmark compares Dijkstra and Bidirectional Dijkstra over all
+ordered pairs of distinct vertices in the supplied graph:
 
-The two algorithms were tested across all **1,260 ordered source-destination pairs** in the supplied graph.
+\[ Q=\|V\|(\|V\|-1)=36`\times35`{=tex}=1,260 \]
 
-| Validation | Result |
-|---|---|
-| Reachability mismatches | 0 |
-| Shortest-distance mismatches | 0 |
-| Ordered source-destination pairs tested | 1,260 |
-| C++ compilation | Passed |
-| Frontend JavaScript syntax check | Passed |
-| FastAPI endpoint checks | Passed |
+The recorded final benchmark used 10 trials per pair and 10,000
+in-process timing repetitions per measurement.
 
-For detailed results, see [`tests/TEST_REPORT.md`](tests/TEST_REPORT.md).
+### Final benchmark results
+
+  -----------------------------------------------------------------------
+  Metric                               Dijkstra    Bidirectional Dijkstra
+  ------------------- ------------------------- -------------------------
+  Queries                                 1,260                     1,260
+
+  Mean explored                       19.000000                 13.593651
+  vertices                                      
+
+  Mean execution time            0.001211387294            0.001577019508
+  (ms)                                          
+
+  Execution-time                 0.000378177927            0.000426942346
+  standard deviation                            
+  (ms)                                          
+
+  Path validity                            100%                      100%
+  -----------------------------------------------------------------------
+
+Correctness comparison:
+
+  Check                                     Result
+  --------------------------------------- --------
+  Reachability mismatches                        0
+  Shortest-cost mismatches                       0
+  Invalid returned paths                         0
+  Unreachable queries in supplied graph          0
+
+On this graph, Bidirectional Dijkstra explored approximately 28.45%
+fewer vertices on average, while its measured mean execution time was
+approximately 30.18% higher than Dijkstra's. This illustrates that
+exploring fewer vertices does not necessarily result in lower execution
+time; the overhead of coordinating two searches can matter, particularly
+on a small graph.
+
+The reported timing measures the repeated in-process algorithm execution
+after graph loading. It excludes graph parsing, process startup, Python
+orchestration, API handling, and frontend rendering. The measurements
+are machine- and build-specific and should not be interpreted as
+end-to-end application latency.
+
+For methodology, detailed validation results, and limitations, see
+[`tests/TEST_REPORT.md`](tests/TEST_REPORT.md).
+
+### Run the benchmark
+
+From the project root:
+
+``` powershell
+python tests/benchmarks/astranav_benchmark.py
+```
+
+### Generate the comparison chart
+
+Install plotting dependencies if needed:
+
+``` powershell
+pip install pandas matplotlib
+```
+
+Then run:
+
+``` powershell
+python tests/benchmarks/plot_benchmark.py
+```
+
+The plotting script should save the chart to
+`docs/screenshots/algorithm_comparison.png`. Ensure the script's input
+CSV path and output path match your repository layout.
+
+## Testing
+
+The supplied validation run recorded:
+
+-   Successful C++17 compilation using
+    `g++ -std=c++17 -O2 -Wall -Wextra -pedantic`.
+-   Successful JavaScript syntax check using `node --check`.
+-   Successful Python backend compilation check.
+-   HTTP 200 responses from FastAPI TestClient checks for `/`,
+    `/static/app.js`, `/static/campus-map.png`, `/api/graph`, and
+    `/api/health`.
+-   Matching sample route cost from Gate 3 (node 0) to J.C. Bose Block
+    (node 3): 0.686 illustrative kilometres.
+
+These are results from the validated project snapshot; rerun the checks
+after modifying source files.
 
 ## DAA Concepts Demonstrated
 
-- Graph theory and adjacency lists
-- Weighted and undirected graphs
-- Greedy algorithm design
-- Bidirectional search
-- Priority queues
-- Edge relaxation
-- Shortest-path reconstruction
-- Time and space complexity analysis
-- Algorithm performance comparison
+-   Graph representation and adjacency lists
+-   Weighted graph traversal
+-   Greedy algorithm design
+-   Dijkstra's shortest-path algorithm
+-   Bidirectional search
+-   Priority queues and edge relaxation
+-   Path reconstruction
+-   Time and space complexity
+-   Empirical algorithm comparison
 
 ## Limitations
 
-- Campus nodes, coordinates, and edge weights are illustrative and have not been independently verified against actual pedestrian routes.
-- The campus map is used as a visual background; route calculation is performed using the JSON graph.
-- The current graph represents the supplied campus connections and may not include every real-world pedestrian walkway.
-- Execution times on small graphs vary and should not be treated as reliable benchmarks.
-- Bidirectional Dijkstra does not guarantee fewer explored nodes for every source-destination pair.
+-   The graph contains 36 vertices and 39 JSON edge records; performance
+    results from this small graph do not establish performance on larger
+    networks.
+-   Edge weights are illustrative and are not independently surveyed
+    walking distances.
+-   The supplied graph may not contain every real campus pedestrian
+    connection.
+-   The campus map is a visual background; route calculation is based on
+    the JSON graph.
+-   Node coordinates and route overlay alignment should be visually
+    checked in the browser.
+-   Execution times are very small and sensitive to hardware, compiler,
+    optimization flags, and measurement conditions.
+-   Bidirectional Dijkstra does not guarantee fewer explored vertices or
+    lower execution time for every query.
 
-## Future Improvements
+## Future Work
 
-- Verify campus coordinates and walking distances against actual campus paths.
-- Expand the graph to cover additional campus locations and pedestrian connections.
-- Add route alternatives and improved route comparison.
-- Introduce accessibility-aware routing and obstacle handling.
-- Improve algorithm benchmarking using larger graphs.
+-   Verify graph edges against actual pedestrian walkways.
+-   Survey or otherwise validate real walking distances.
+-   Expand the graph to cover additional campus locations.
+-   Evaluate the algorithms on larger and more varied graphs.
+-   Record the exact CPU, operating system, compiler version, and build
+    environment for reproducible timing studies.
+-   Explore accessibility-aware routing and obstacle-aware path
+    planning.
 
----
+------------------------------------------------------------------------
 
-**AstraNav — Exploring shortest paths through graph algorithms.**
+**AstraNav --- Exploring campus routes through graph algorithms.**
