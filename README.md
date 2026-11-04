@@ -56,7 +56,9 @@ High-level process:
 
 With an adjacency list and binary heap, the expected time complexity is:
 
-\[ O((\|V\|+\|E\|)`\log `{=tex}\|V\|) \]
+$$
+O((|V|+|E|)\log |V|)
+$$
 
 ### Bidirectional Dijkstra
 
@@ -74,7 +76,9 @@ best known path cost.
 
 Its worst-case asymptotic time complexity with binary heaps remains:
 
-\[ O((\|V\|+\|E\|)`\log `{=tex}\|V\|) \]
+$$
+O((|V|+|E|)\log |V|)
+$$
 
 Bidirectional search can reduce the number of explored vertices, but it
 does not guarantee lower execution time for every graph or query.
