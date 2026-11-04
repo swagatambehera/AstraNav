@@ -1,6 +1,7 @@
 #include <cctype>
 #include <algorithm>
 #include <chrono>
+#include <cstdlib>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -387,15 +388,51 @@ int main() {
         graph.reverseAdj[to].push_back({from, weight});
     }
 
-    const Result result =
-        shortestPath(graph, source, target, algorithm);
+    // Optional benchmark mode: repeat the same query after the graph has
+    // been parsed, then report the average algorithm time per execution.
+    // Normal application calls remain unchanged when the environment
+    // variable is absent (default repetitions = 1).
+    int repetitions = 1;
+    if (const char* value = std::getenv("ASTRANAV_BENCH_REPETITIONS")) {
+        try {
+            const int parsed = stoi(value);
+            if (parsed >= 1 && parsed <= 1000000) {
+                repetitions = parsed;
+            } else {
+                cerr << "Invalid ASTRANAV_BENCH_REPETITIONS; using 1\n";
+            }
+        } catch (...) {
+            cerr << "Invalid ASTRANAV_BENCH_REPETITIONS; using 1\n";
+        }
+    }
 
-    cout << fixed << setprecision(8);
+    Result result;
+    if (repetitions == 1) {
+        result = shortestPath(graph, source, target, algorithm);
+    } else {
+        volatile double benchmarkSink = 0.0;
+        const auto benchmarkStart = chrono::steady_clock::now();
+        for (int i = 0; i < repetitions; ++i) {
+            result = shortestPath(graph, source, target, algorithm);
+            benchmarkSink = benchmarkSink +
+                (result.found ? result.distance : 0.0) +
+                static_cast<double>(result.explored) +
+                static_cast<double>(result.path.size());
+        }
+        const auto benchmarkEnd = chrono::steady_clock::now();
+        result.milliseconds =
+            chrono::duration<double, milli>(benchmarkEnd - benchmarkStart).count() /
+            static_cast<double>(repetitions);
+        (void)benchmarkSink;
+    }
+
+    cout << fixed << setprecision(12);
 
     cout << "{\"found\":" << (result.found ? "true" : "false")
          << ",\"distance_km\":" << (result.found ? result.distance : 0.0)
          << ",\"explored_nodes\":" << result.explored
          << ",\"execution_ms\":" << result.milliseconds
+         << ",\"timing_repetitions\":" << repetitions
          << ",\"path\":[";
 
     for (size_t i = 0; i < result.path.size(); ++i) {
