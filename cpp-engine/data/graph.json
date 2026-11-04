@@ -5,10 +5,15 @@
       "width": 1106,
       "height": 1422
     },
-    "coordinate_note": "Node x/y coordinates use the 1400x1800 graph coordinate canvas, which has the same aspect ratio as the supplied 1106x1422 image. SVG viewBox scales coordinates to the displayed image.",
+    "coordinate_note": "Node x/y coordinates use the 1400x1800 graph coordinate canvas. The frontend SVG uses the same viewBox and overlays the map image.",
     "edge_note": "Edges are the explicit walkable connections drawn on the schematic. All edges are bidirectional.",
-    "distance_unit": "illustrative kilometres",
-    "warning": "This is an educational schematic based on the user's reference image. Verify official building names, entrances, and walkway connectivity before real navigation."
+    "distance_unit": "illustrative coordinate-based kilometres",
+    "warning": "This is an educational schematic based on the user's reference image. Verify official building names, entrances, and walkway connectivity before real navigation.",
+    "weight_note": "Edge weights are proportional to straight-line distance between the supplied graph-node coordinates (coordinate units / 1000). They are educational approximations, not surveyed walkway distances.",
+    "coordinate_canvas": {
+      "width": 1400,
+      "height": 1800
+    }
   },
   "nodes": [
     {
@@ -340,235 +345,235 @@
     {
       "from": 8,
       "to": 18,
-      "weight": 0.035,
+      "weight": 0.07,
       "bidirectional": true
     },
     {
       "from": 18,
       "to": 9,
-      "weight": 0.08,
+      "weight": 0.1595,
       "bidirectional": true
     },
     {
       "from": 18,
       "to": 10,
-      "weight": 0.095,
+      "weight": 0.19,
       "bidirectional": true
     },
     {
       "from": 18,
       "to": 11,
-      "weight": 0.262,
+      "weight": 0.5247,
       "bidirectional": true
     },
     {
       "from": 11,
       "to": 12,
-      "weight": 0.06,
+      "weight": 0.12,
       "bidirectional": true
     },
     {
       "from": 12,
       "to": 34,
-      "weight": 0.088,
+      "weight": 0.1761,
       "bidirectional": true
     },
     {
       "from": 34,
       "to": 14,
-      "weight": 0.05,
+      "weight": 0.1,
       "bidirectional": true
     },
     {
       "from": 34,
       "to": 35,
-      "weight": 0.092,
+      "weight": 0.185,
       "bidirectional": true
     },
     {
       "from": 10,
       "to": 13,
-      "weight": 0.063,
+      "weight": 0.1254,
       "bidirectional": true
     },
     {
       "from": 13,
       "to": 19,
-      "weight": 0.038,
+      "weight": 0.0757,
       "bidirectional": true
     },
     {
       "from": 19,
       "to": 31,
-      "weight": 0.125,
+      "weight": 0.25,
       "bidirectional": true
     },
     {
       "from": 31,
       "to": 6,
-      "weight": 0.182,
+      "weight": 0.365,
       "bidirectional": true
     },
     {
       "from": 31,
       "to": 7,
-      "weight": 0.28,
+      "weight": 0.56,
       "bidirectional": true
     },
     {
       "from": 19,
       "to": 20,
-      "weight": 0.065,
+      "weight": 0.13,
       "bidirectional": true
     },
     {
       "from": 20,
       "to": 5,
-      "weight": 0.14,
+      "weight": 0.2804,
       "bidirectional": true
     },
     {
       "from": 20,
       "to": 21,
-      "weight": 0.02,
+      "weight": 0.04,
       "bidirectional": true
     },
     {
       "from": 21,
       "to": 0,
-      "weight": 0.31,
+      "weight": 0.62,
       "bidirectional": true
     },
     {
       "from": 0,
       "to": 22,
-      "weight": 0.005,
+      "weight": 0.0,
       "bidirectional": true
     },
     {
       "from": 22,
       "to": 35,
-      "weight": 0.02,
+      "weight": 0.04,
       "bidirectional": true
     },
     {
       "from": 35,
       "to": 5,
-      "weight": 0.188,
+      "weight": 0.375,
       "bidirectional": true
     },
     {
       "from": 21,
       "to": 23,
-      "weight": 0.05,
+      "weight": 0.1,
       "bidirectional": true
     },
     {
       "from": 23,
       "to": 4,
-      "weight": 0.175,
+      "weight": 0.3502,
       "bidirectional": true
     },
     {
       "from": 23,
       "to": 24,
-      "weight": 0.2,
+      "weight": 0.4,
       "bidirectional": true
     },
     {
       "from": 24,
       "to": 25,
-      "weight": 0.098,
+      "weight": 0.195,
       "bidirectional": true
     },
     {
       "from": 25,
       "to": 3,
-      "weight": 0.028,
+      "weight": 0.055,
       "bidirectional": true
     },
     {
       "from": 25,
       "to": 26,
-      "weight": 0.212,
+      "weight": 0.425,
       "bidirectional": true
     },
     {
       "from": 26,
       "to": 15,
-      "weight": 0.13,
+      "weight": 0.2599,
       "bidirectional": true
     },
     {
       "from": 26,
       "to": 33,
-      "weight": 0.06,
+      "weight": 0.12,
       "bidirectional": true
     },
     {
       "from": 33,
       "to": 17,
-      "weight": 0.025,
+      "weight": 0.05,
       "bidirectional": true
     },
     {
       "from": 33,
       "to": 16,
-      "weight": 0.147,
+      "weight": 0.2941,
       "bidirectional": true
     },
     {
       "from": 32,
       "to": 16,
-      "weight": 0.19,
+      "weight": 0.38,
       "bidirectional": true
     },
     {
       "from": 24,
       "to": 32,
-      "weight": 0.145,
+      "weight": 0.29,
       "bidirectional": true
     },
     {
       "from": 30,
       "to": 7,
-      "weight": 0.065,
+      "weight": 0.13,
       "bidirectional": true
     },
     {
       "from": 30,
       "to": 27,
-      "weight": 0.04,
+      "weight": 0.08,
       "bidirectional": true
     },
     {
       "from": 27,
       "to": 1,
-      "weight": 0.1,
+      "weight": 0.2,
       "bidirectional": true
     },
     {
       "from": 27,
       "to": 28,
-      "weight": 0.185,
+      "weight": 0.37,
       "bidirectional": true
     },
     {
       "from": 28,
       "to": 29,
-      "weight": 0.043,
+      "weight": 0.085,
       "bidirectional": true
     },
     {
       "from": 29,
       "to": 2,
-      "weight": 0.04,
+      "weight": 0.08,
       "bidirectional": true
     },
     {
       "from": 24,
       "to": 27,
-      "weight": 0.086,
+      "weight": 0.1712,
       "bidirectional": true
     }
   ]
